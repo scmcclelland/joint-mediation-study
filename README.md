@@ -1,4 +1,4 @@
-R code for analyses and figures in "Soil organic carbon sequestration jointly-mediated by plants and microbes after compost application"
+R code for analyses and figures for the manuscript "Soil organic carbon sequestration jointly-mediated by plants and microbes after compost application," currently under submission. Upon acceptance, the journal name and additional publication information will be added here.
 
 "analysis-functions" contain supporting analysis functions.
 
