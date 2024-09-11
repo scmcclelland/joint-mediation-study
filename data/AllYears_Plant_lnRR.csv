@@ -1,0 +1,433 @@
+Trt,Block,Year,Species,Rel.Abund
+Compost,1,2018,Bromus spp,82
+Control,1,2018,Bromus spp,92
+Compost,2,2018,Bromus spp,96
+Control,2,2018,Bromus spp,88
+Compost,3,2018,Bromus spp,32
+Control,3,2018,Bromus spp,80
+Compost,4,2018,Bromus spp,92
+Control,4,2018,Bromus spp,94
+Compost,5,2018,Bromus spp,82
+Control,5,2018,Bromus spp,98
+Compost,6,2018,Bromus spp,86
+Control,6,2018,Bromus spp,94
+Compost,7,2018,Bromus spp,88
+Control,7,2018,Bromus spp,86
+Compost,8,2018,Bromus spp,54
+Control,8,2018,Bromus spp,62
+Compost,1,2018,Dactylis glomerata ,10
+Control,1,2018,Dactylis glomerata ,0
+Compost,2,2018,Dactylis glomerata ,0
+Control,2,2018,Dactylis glomerata ,0
+Compost,3,2018,Dactylis glomerata ,44
+Control,3,2018,Dactylis glomerata ,2
+Compost,4,2018,Dactylis glomerata ,0
+Control,4,2018,Dactylis glomerata ,0
+Compost,5,2018,Dactylis glomerata ,0
+Control,5,2018,Dactylis glomerata ,0
+Compost,6,2018,Dactylis glomerata ,2
+Control,6,2018,Dactylis glomerata ,0
+Compost,7,2018,Dactylis glomerata ,0
+Control,7,2018,Dactylis glomerata ,2
+Compost,8,2018,Dactylis glomerata ,28
+Control,8,2018,Dactylis glomerata ,20
+Compost,1,2018,Convolvulus arvensis ,0
+Control,1,2018,Convolvulus arvensis ,2
+Compost,2,2018,Convolvulus arvensis ,0
+Control,2,2018,Convolvulus arvensis ,0
+Compost,3,2018,Convolvulus arvensis ,0
+Control,3,2018,Convolvulus arvensis ,6
+Compost,4,2018,Convolvulus arvensis ,0
+Control,4,2018,Convolvulus arvensis ,0
+Compost,5,2018,Convolvulus arvensis ,2
+Control,5,2018,Convolvulus arvensis ,2
+Compost,6,2018,Convolvulus arvensis ,0
+Control,6,2018,Convolvulus arvensis ,0
+Compost,7,2018,Convolvulus arvensis ,0
+Control,7,2018,Convolvulus arvensis ,0
+Compost,8,2018,Convolvulus arvensis ,0
+Control,8,2018,Convolvulus arvensis ,4
+Compost,1,2018,Festuca arundinacea,0
+Control,1,2018,Festuca arundinacea,0
+Compost,2,2018,Festuca arundinacea,0
+Control,2,2018,Festuca arundinacea,0
+Compost,3,2018,Festuca arundinacea,0
+Control,3,2018,Festuca arundinacea,0
+Compost,4,2018,Festuca arundinacea,0
+Control,4,2018,Festuca arundinacea,2
+Compost,5,2018,Festuca arundinacea,0
+Control,5,2018,Festuca arundinacea,0
+Compost,6,2018,Festuca arundinacea,0
+Control,6,2018,Festuca arundinacea,0
+Compost,7,2018,Festuca arundinacea,6
+Control,7,2018,Festuca arundinacea,2
+Compost,8,2018,Festuca arundinacea,8
+Control,8,2018,Festuca arundinacea,6
+Compost,1,2018,Poa pratensis,0
+Control,1,2018,Poa pratensis,0
+Compost,2,2018,Poa pratensis,0
+Control,2,2018,Poa pratensis,0
+Compost,3,2018,Poa pratensis,0
+Control,3,2018,Poa pratensis,0
+Compost,4,2018,Poa pratensis,0
+Control,4,2018,Poa pratensis,0
+Compost,5,2018,Poa pratensis,0
+Control,5,2018,Poa pratensis,0
+Compost,6,2018,Poa pratensis,2
+Control,6,2018,Poa pratensis,0
+Compost,7,2018,Poa pratensis,0
+Control,7,2018,Poa pratensis,0
+Compost,8,2018,Poa pratensis,0
+Control,8,2018,Poa pratensis,0
+Compost,1,2018,Medicago sativa ,4
+Control,1,2018,Medicago sativa ,6
+Compost,2,2018,Medicago sativa ,2
+Control,2,2018,Medicago sativa ,4
+Compost,3,2018,Medicago sativa ,8
+Control,3,2018,Medicago sativa ,8
+Compost,4,2018,Medicago sativa ,6
+Control,4,2018,Medicago sativa ,4
+Compost,5,2018,Medicago sativa ,16
+Control,5,2018,Medicago sativa ,0
+Compost,6,2018,Medicago sativa ,8
+Control,6,2018,Medicago sativa ,6
+Compost,7,2018,Medicago sativa ,4
+Control,7,2018,Medicago sativa ,10
+Compost,8,2018,Medicago sativa ,8
+Control,8,2018,Medicago sativa ,8
+Compost,1,2018,Thinopyrum intermedium,0
+Control,1,2018,Thinopyrum intermedium,0
+Compost,2,2018,Thinopyrum intermedium,0
+Control,2,2018,Thinopyrum intermedium,0
+Compost,3,2018,Thinopyrum intermedium,10
+Control,3,2018,Thinopyrum intermedium,4
+Compost,4,2018,Thinopyrum intermedium,2
+Control,4,2018,Thinopyrum intermedium,0
+Compost,5,2018,Thinopyrum intermedium,0
+Control,5,2018,Thinopyrum intermedium,0
+Compost,6,2018,Thinopyrum intermedium,2
+Control,6,2018,Thinopyrum intermedium,0
+Compost,7,2018,Thinopyrum intermedium,2
+Control,7,2018,Thinopyrum intermedium,0
+Compost,8,2018,Thinopyrum intermedium,2
+Control,8,2018,Thinopyrum intermedium,0
+Compost,1,2018,Taraxacum spp,4
+Control,1,2018,Taraxacum spp,0
+Compost,2,2018,Taraxacum spp,2
+Control,2,2018,Taraxacum spp,8
+Compost,3,2018,Taraxacum spp,6
+Control,3,2018,Taraxacum spp,0
+Compost,4,2018,Taraxacum spp,0
+Control,4,2018,Taraxacum spp,0
+Compost,5,2018,Taraxacum spp,0
+Control,5,2018,Taraxacum spp,0
+Compost,6,2018,Taraxacum spp,0
+Control,6,2018,Taraxacum spp,0
+Compost,7,2018,Taraxacum spp,0
+Control,7,2018,Taraxacum spp,0
+Compost,8,2018,Taraxacum spp,0
+Control,8,2018,Taraxacum spp,0
+Compost,1,2019,Bromus inermis,54
+Control,1,2019,Bromus inermis,76
+Compost,2,2019,Bromus inermis,78
+Control,2,2019,Bromus inermis,76
+Compost,3,2019,Bromus inermis,28
+Control,3,2019,Bromus inermis,52
+Compost,4,2019,Bromus inermis,66
+Control,4,2019,Bromus inermis,92
+Compost,5,2019,Bromus inermis,82
+Control,5,2019,Bromus inermis,88
+Compost,6,2019,Bromus inermis,58
+Control,6,2019,Bromus inermis,90
+Compost,7,2019,Bromus inermis,80
+Control,7,2019,Bromus inermis,76
+Compost,8,2019,Bromus inermis,26
+Control,8,2019,Bromus inermis,44
+Compost,1,2019,Bromus commutatus,18
+Control,1,2019,Bromus commutatus,22
+Compost,2,2019,Bromus commutatus,16
+Control,2,2019,Bromus commutatus,18
+Compost,3,2019,Bromus commutatus,22
+Control,3,2019,Bromus commutatus,40
+Compost,4,2019,Bromus commutatus,16
+Control,4,2019,Bromus commutatus,0
+Compost,5,2019,Bromus commutatus,2
+Control,5,2019,Bromus commutatus,0
+Compost,6,2019,Bromus commutatus,30
+Control,6,2019,Bromus commutatus,0
+Compost,7,2019,Bromus commutatus,2
+Control,7,2019,Bromus commutatus,4
+Compost,8,2019,Bromus commutatus,34
+Control,8,2019,Bromus commutatus,36
+Compost,1,2019,Dactylis glomerata ,20
+Control,1,2019,Dactylis glomerata ,0
+Compost,2,2019,Dactylis glomerata ,0
+Control,2,2019,Dactylis glomerata ,4
+Compost,3,2019,Dactylis glomerata ,18
+Control,3,2019,Dactylis glomerata ,2
+Compost,4,2019,Dactylis glomerata ,0
+Control,4,2019,Dactylis glomerata ,0
+Compost,5,2019,Dactylis glomerata ,6
+Control,5,2019,Dactylis glomerata ,0
+Compost,6,2019,Dactylis glomerata ,2
+Control,6,2019,Dactylis glomerata ,2
+Compost,7,2019,Dactylis glomerata ,2
+Control,7,2019,Dactylis glomerata ,0
+Compost,8,2019,Dactylis glomerata ,16
+Control,8,2019,Dactylis glomerata ,14
+Compost,1,2019,Convolvulus arvensis ,0
+Control,1,2019,Convolvulus arvensis ,0
+Compost,2,2019,Convolvulus arvensis ,0
+Control,2,2019,Convolvulus arvensis ,0
+Compost,3,2019,Convolvulus arvensis ,2
+Control,3,2019,Convolvulus arvensis ,0
+Compost,4,2019,Convolvulus arvensis ,4
+Control,4,2019,Convolvulus arvensis ,0
+Compost,5,2019,Convolvulus arvensis ,4
+Control,5,2019,Convolvulus arvensis ,2
+Compost,6,2019,Convolvulus arvensis ,0
+Control,6,2019,Convolvulus arvensis ,2
+Compost,7,2019,Convolvulus arvensis ,6
+Control,7,2019,Convolvulus arvensis ,0
+Compost,8,2019,Convolvulus arvensis ,2
+Control,8,2019,Convolvulus arvensis ,2
+Compost,1,2019,Festuca arundinacea,0
+Control,1,2019,Festuca arundinacea,0
+Compost,2,2019,Festuca arundinacea,0
+Control,2,2019,Festuca arundinacea,0
+Compost,3,2019,Festuca arundinacea,2
+Control,3,2019,Festuca arundinacea,0
+Compost,4,2019,Festuca arundinacea,0
+Control,4,2019,Festuca arundinacea,0
+Compost,5,2019,Festuca arundinacea,0
+Control,5,2019,Festuca arundinacea,4
+Compost,6,2019,Festuca arundinacea,2
+Control,6,2019,Festuca arundinacea,0
+Compost,7,2019,Festuca arundinacea,2
+Control,7,2019,Festuca arundinacea,10
+Compost,8,2019,Festuca arundinacea,6
+Control,8,2019,Festuca arundinacea,0
+Compost,1,2019,Poa pratensis,4
+Control,1,2019,Poa pratensis,0
+Compost,2,2019,Poa pratensis,0
+Control,2,2019,Poa pratensis,0
+Compost,3,2019,Poa pratensis,12
+Control,3,2019,Poa pratensis,0
+Compost,4,2019,Poa pratensis,4
+Control,4,2019,Poa pratensis,0
+Compost,5,2019,Poa pratensis,0
+Control,5,2019,Poa pratensis,0
+Compost,6,2019,Poa pratensis,0
+Control,6,2019,Poa pratensis,0
+Compost,7,2019,Poa pratensis,0
+Control,7,2019,Poa pratensis,6
+Compost,8,2019,Poa pratensis,0
+Control,8,2019,Poa pratensis,0
+Compost,1,2019,Medicago sativa ,2
+Control,1,2019,Medicago sativa ,2
+Compost,2,2019,Medicago sativa ,6
+Control,2,2019,Medicago sativa ,2
+Compost,3,2019,Medicago sativa ,10
+Control,3,2019,Medicago sativa ,6
+Compost,4,2019,Medicago sativa ,6
+Control,4,2019,Medicago sativa ,8
+Compost,5,2019,Medicago sativa ,6
+Control,5,2019,Medicago sativa ,6
+Compost,6,2019,Medicago sativa ,8
+Control,6,2019,Medicago sativa ,4
+Compost,7,2019,Medicago sativa ,8
+Control,7,2019,Medicago sativa ,4
+Compost,8,2019,Medicago sativa ,6
+Control,8,2019,Medicago sativa ,4
+Compost,1,2019,Pascopyrum smithii ,0
+Control,1,2019,Pascopyrum smithii ,0
+Compost,2,2019,Pascopyrum smithii ,0
+Control,2,2019,Pascopyrum smithii ,0
+Compost,3,2019,Pascopyrum smithii ,0
+Control,3,2019,Pascopyrum smithii ,0
+Compost,4,2019,Pascopyrum smithii ,0
+Control,4,2019,Pascopyrum smithii ,0
+Compost,5,2019,Pascopyrum smithii ,0
+Control,5,2019,Pascopyrum smithii ,0
+Compost,6,2019,Pascopyrum smithii ,0
+Control,6,2019,Pascopyrum smithii ,0
+Compost,7,2019,Pascopyrum smithii ,0
+Control,7,2019,Pascopyrum smithii ,0
+Compost,8,2019,Pascopyrum smithii ,2
+Control,8,2019,Pascopyrum smithii ,0
+Compost,1,2019,Thinopyrum intermedium,0
+Control,1,2019,Thinopyrum intermedium,0
+Compost,2,2019,Thinopyrum intermedium,0
+Control,2,2019,Thinopyrum intermedium,0
+Compost,3,2019,Thinopyrum intermedium,6
+Control,3,2019,Thinopyrum intermedium,0
+Compost,4,2019,Thinopyrum intermedium,4
+Control,4,2019,Thinopyrum intermedium,0
+Compost,5,2019,Thinopyrum intermedium,0
+Control,5,2019,Thinopyrum intermedium,0
+Compost,6,2019,Thinopyrum intermedium,0
+Control,6,2019,Thinopyrum intermedium,0
+Compost,7,2019,Thinopyrum intermedium,0
+Control,7,2019,Thinopyrum intermedium,0
+Compost,8,2019,Thinopyrum intermedium,8
+Control,8,2019,Thinopyrum intermedium,0
+Compost,1,2019,Taraxacum spp,2
+Control,1,2019,Taraxacum spp,0
+Compost,2,2019,Taraxacum spp,0
+Control,2,2019,Taraxacum spp,0
+Compost,3,2019,Taraxacum spp,0
+Control,3,2019,Taraxacum spp,0
+Compost,4,2019,Taraxacum spp,0
+Control,4,2019,Taraxacum spp,0
+Compost,5,2019,Taraxacum spp,0
+Control,5,2019,Taraxacum spp,0
+Compost,6,2019,Taraxacum spp,0
+Control,6,2019,Taraxacum spp,2
+Compost,7,2019,Taraxacum spp,0
+Control,7,2019,Taraxacum spp,0
+Compost,8,2019,Taraxacum spp,0
+Control,8,2019,Taraxacum spp,0
+Compost,1,2020,Bromus inermis,50
+Control,1,2020,Bromus inermis,60
+Compost,2,2020,Bromus inermis,76
+Control,2,2020,Bromus inermis,68
+Compost,3,2020,Bromus inermis,34
+Control,3,2020,Bromus inermis,70
+Compost,4,2020,Bromus inermis,80
+Control,4,2020,Bromus inermis,92
+Compost,5,2020,Bromus inermis,80
+Control,5,2020,Bromus inermis,88
+Compost,6,2020,Bromus inermis,68
+Control,6,2020,Bromus inermis,98
+Compost,7,2020,Bromus inermis,86
+Control,7,2020,Bromus inermis,86
+Compost,8,2020,Bromus inermis,14
+Control,8,2020,Bromus inermis,50
+Compost,1,2020,Bromus commutatus,40
+Control,1,2020,Bromus commutatus,32
+Compost,2,2020,Bromus commutatus,18
+Control,2,2020,Bromus commutatus,26
+Compost,3,2020,Bromus commutatus,36
+Control,3,2020,Bromus commutatus,20
+Compost,4,2020,Bromus commutatus,10
+Control,4,2020,Bromus commutatus,0
+Compost,5,2020,Bromus commutatus,4
+Control,5,2020,Bromus commutatus,4
+Compost,6,2020,Bromus commutatus,22
+Control,6,2020,Bromus commutatus,0
+Compost,7,2020,Bromus commutatus,2
+Control,7,2020,Bromus commutatus,4
+Compost,8,2020,Bromus commutatus,64
+Control,8,2020,Bromus commutatus,34
+Compost,1,2020,Dactylis glomerata ,8
+Control,1,2020,Dactylis glomerata ,4
+Compost,2,2020,Dactylis glomerata ,0
+Control,2,2020,Dactylis glomerata ,0
+Compost,3,2020,Dactylis glomerata ,6
+Control,3,2020,Dactylis glomerata ,0
+Compost,4,2020,Dactylis glomerata ,0
+Control,4,2020,Dactylis glomerata ,0
+Compost,5,2020,Dactylis glomerata ,2
+Control,5,2020,Dactylis glomerata ,0
+Compost,6,2020,Dactylis glomerata ,0
+Control,6,2020,Dactylis glomerata ,0
+Compost,7,2020,Dactylis glomerata ,4
+Control,7,2020,Dactylis glomerata ,2
+Compost,8,2020,Dactylis glomerata ,10
+Control,8,2020,Dactylis glomerata ,6
+Compost,1,2020,Convolvulus arvensis ,0
+Control,1,2020,Convolvulus arvensis ,2
+Compost,2,2020,Convolvulus arvensis ,0
+Control,2,2020,Convolvulus arvensis ,0
+Compost,3,2020,Convolvulus arvensis ,2
+Control,3,2020,Convolvulus arvensis ,2
+Compost,4,2020,Convolvulus arvensis ,0
+Control,4,2020,Convolvulus arvensis ,2
+Compost,5,2020,Convolvulus arvensis ,2
+Control,5,2020,Convolvulus arvensis ,0
+Compost,6,2020,Convolvulus arvensis ,4
+Control,6,2020,Convolvulus arvensis ,0
+Compost,7,2020,Convolvulus arvensis ,2
+Control,7,2020,Convolvulus arvensis ,4
+Compost,8,2020,Convolvulus arvensis ,0
+Control,8,2020,Convolvulus arvensis ,0
+Compost,1,2020,Festuca arundinacea,0
+Control,1,2020,Festuca arundinacea,0
+Compost,2,2020,Festuca arundinacea,0
+Control,2,2020,Festuca arundinacea,0
+Compost,3,2020,Festuca arundinacea,2
+Control,3,2020,Festuca arundinacea,0
+Compost,4,2020,Festuca arundinacea,0
+Control,4,2020,Festuca arundinacea,0
+Compost,5,2020,Festuca arundinacea,0
+Control,5,2020,Festuca arundinacea,0
+Compost,6,2020,Festuca arundinacea,0
+Control,6,2020,Festuca arundinacea,0
+Compost,7,2020,Festuca arundinacea,0
+Control,7,2020,Festuca arundinacea,0
+Compost,8,2020,Festuca arundinacea,0
+Control,8,2020,Festuca arundinacea,0
+Compost,1,2020,Medicago sativa ,2
+Control,1,2020,Medicago sativa ,2
+Compost,2,2020,Medicago sativa ,6
+Control,2,2020,Medicago sativa ,4
+Compost,3,2020,Medicago sativa ,8
+Control,3,2020,Medicago sativa ,8
+Compost,4,2020,Medicago sativa ,10
+Control,4,2020,Medicago sativa ,6
+Compost,5,2020,Medicago sativa ,12
+Control,5,2020,Medicago sativa ,8
+Compost,6,2020,Medicago sativa ,6
+Control,6,2020,Medicago sativa ,2
+Compost,7,2020,Medicago sativa ,6
+Control,7,2020,Medicago sativa ,4
+Compost,8,2020,Medicago sativa ,6
+Control,8,2020,Medicago sativa ,10
+Compost,1,2020,Thinopyrum intermedium,0
+Control,1,2020,Thinopyrum intermedium,0
+Compost,2,2020,Thinopyrum intermedium,0
+Control,2,2020,Thinopyrum intermedium,0
+Compost,3,2020,Thinopyrum intermedium,8
+Control,3,2020,Thinopyrum intermedium,0
+Compost,4,2020,Thinopyrum intermedium,0
+Control,4,2020,Thinopyrum intermedium,0
+Compost,5,2020,Thinopyrum intermedium,0
+Control,5,2020,Thinopyrum intermedium,0
+Compost,6,2020,Thinopyrum intermedium,0
+Control,6,2020,Thinopyrum intermedium,0
+Compost,7,2020,Thinopyrum intermedium,0
+Control,7,2020,Thinopyrum intermedium,0
+Compost,8,2020,Thinopyrum intermedium,4
+Control,8,2020,Thinopyrum intermedium,0
+Compost,1,2020,Taraxacum spp,0
+Control,1,2020,Taraxacum spp,0
+Compost,2,2020,Taraxacum spp,0
+Control,2,2020,Taraxacum spp,0
+Compost,3,2020,Taraxacum spp,4
+Control,3,2020,Taraxacum spp,0
+Compost,4,2020,Taraxacum spp,0
+Control,4,2020,Taraxacum spp,0
+Compost,5,2020,Taraxacum spp,0
+Control,5,2020,Taraxacum spp,0
+Compost,6,2020,Taraxacum spp,0
+Control,6,2020,Taraxacum spp,0
+Compost,7,2020,Taraxacum spp,0
+Control,7,2020,Taraxacum spp,0
+Compost,8,2020,Taraxacum spp,2
+Control,8,2020,Taraxacum spp,0
+Compost,1,2020,Tragopon dubius,0
+Control,1,2020,Tragopon dubius,0
+Compost,2,2020,Tragopon dubius,0
+Control,2,2020,Tragopon dubius,2
+Compost,3,2020,Tragopon dubius,0
+Control,3,2020,Tragopon dubius,0
+Compost,4,2020,Tragopon dubius,0
+Control,4,2020,Tragopon dubius,0
+Compost,5,2020,Tragopon dubius,0
+Control,5,2020,Tragopon dubius,0
+Compost,6,2020,Tragopon dubius,0
+Control,6,2020,Tragopon dubius,0
+Compost,7,2020,Tragopon dubius,0
+Control,7,2020,Tragopon dubius,0
+Compost,8,2020,Tragopon dubius,0
+Control,8,2020,Tragopon dubius,0
