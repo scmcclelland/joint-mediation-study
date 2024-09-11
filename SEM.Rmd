@@ -1,0 +1,366 @@
+---
+title: "SEM_Ecol-Letters_SCM"
+output: html_document
+date: "`r Sys.Date()`"
+---
+
+## Overview
+
+This document describes the process used to arrive at the final SEM model selected for the manuscript submitted by McClelland and Schipanski to *Ecology Letters*.
+
+The purpose of this analysis was to explore causal pathways between plants and soil biota on soil C stock under compost.
+
+Our research question was: How does compost influence plant-soil feedbacks on soil C stocks in a managed grassland system?
+
+We hypothesized that C supplied from compost would not solely explain any changes in soil C stocks; rather, plant-soil relationships would explain changes in observed soil C stocks.
+
+We further hypothesized that plants not microbes would drive these changes in soil C stocks, ie plants act as the primary drivers of soil C stock change by influencing both microbial community composition and function, and directly influencing the size of the soil C pool.
+
+A simplified hypothetical model is given below:
+
+compost -\> soil fertility -\> plants -\> microbes -\> soil C stock
+
+In the above model, we hypothesize that the plant influence on soil C stock is mediated by microbes because most of the biomass is removed during hay production indicating a pathway either directly from 1) root biomass (and/or exudates, not measured) and/or 2) microbial transformations of plant inputs into soil C stocks (again, separate soil C fractions not measured). This model also represents the temporal structure of observed changes:
+
+fertility -\> plant productivity -\> plant diversity -\> microbes -\> soil C stock
+
+## Data inputs - Description of methods and analysis
+* Data matched temporally
+* Removed root biomass (redundant of shoot)
+* Compost treated as a categorical variable (0,1)
+* We do not include soil fertility changes because redundant with compost
+* Applied "fiml" in sem function to impute missing SOC data in 2019 (rather than exclude this year)
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+if(!require(Hmisc)) install.packages('Hmisc')
+library(Hmisc)
+if(!require(corrplot)) install.packages('corrplot')
+library(corrplot)
+if (!require(lavaan)) install.packages('lavaan')
+library(lavaan)
+if (!require(AICcmodavg)) install.packages('AICcmodavg')
+library(AICcmodavg)
+if (!require(data.table)) install.packages('data.table')
+library(data.table)
+if (!require(rstudioapi)) install.packages('rstudioapi')
+library(rstudioapi)
+
+base_path =dirname(getActiveDocumentContext()$path)
+data_path = paste(base_path, 'data', sep = '/')
+sem.file = list.files(data_path,pattern = "SEM_data",full.names = TRUE)
+
+sem.data = fread(sem.file)
+head(sem.data)
+# N.B. columns 1:4 not observations
+```
+
+## Correlation and normality analysis
+
+After reading in the data to R, the first analysis step was to assess the 1) normality, 2) covariance, and 3) correlation between the different variables. Because SOC data were not collected in 2019, data from this year were not included in the analysis.
+
+```{r cov, corr, normality}
+sem.data.filter = sem.data[Year != "2019",] # remove 2019 because of missing values for cov, corr analysis only
+sem.data.filter = sem.data.filter[,c(-1:-4,-6,-9,-14)] # remove metadata info and extra variables
+#------------------------------------------------------------------------------
+# normality checks
+# 1. assess for normal distribution | histogram
+par(mfrow=c(2,2)) 
+for (n in 1:ncol(sem.data.filter)) {
+  dtable = sem.data.filter[, ..n]
+  name = names(dtable)
+  print(name)
+  dtable = as.vector(unlist(dtable))
+  hist(dtable, main = paste0(name))
+}
+# 2. formal statistical test | shapiro wilk test
+sw.test.vars = data.table()
+for (n in 1:ncol(sem.data.filter)) {
+  dtable = sem.data.filter[, ..n]
+  name = names(dtable)
+  print(name)
+  dtable = as.vector(unlist(dtable))
+  sw.dtable = shapiro.test(dtable)
+  sw.dtable$data.name = name
+  sw.dtable = data.table(variable = sw.dtable$data.name, p.value = sw.dtable$p.value)
+  sw.test.vars = rbind(sw.test.vars, sw.dtable)
+}
+distribution = c()
+for(p in sw.test.vars$p.value) {
+    if(p < 0.05) {
+    distribution.all = "non.normal"
+  } else {
+    distribution.all = "normal"
+  }
+  distribution = c(distribution, distribution.all) 
+}
+sw.test.vars = cbind(sw.test.vars, distribution)
+#------------------------------------------------------------------------------
+# covariance of variables
+cov.tbl = cov(sem.data.filter)
+#------------------------------------------------------------------------------
+# correlation of variables
+cor.dtable <- rcorr(as.matrix(sem.data.filter), type = "spearman") # default is usually Pearson
+cor.dtable
+# ++++++++++++++++++++++++++++
+# flattenCorrMatrix
+# ++++++++++++++++++++++++++++
+# cormat : matrix of the correlation coefficients
+# pmat : matrix of the correlation p-values
+flattenCorrMatrix <- function(cormat, pmat) {
+  ut <- upper.tri(cormat)
+  data.frame(
+    row = rownames(cormat)[row(cormat)[ut]],
+    column = rownames(cormat)[col(cormat)[ut]],
+    cor = (cormat)[ut],
+    p = pmat[ut]
+  )
+}
+flattenCorrMatrix(cor.dtable$r, cor.dtable$P)
+# Create correlogram diagram
+# Insignificant correlation are crossed
+corrplot(cor.dtable$r, type="upper", order="hclust", 
+         p.mat = cor.dtable$P, sig.level = 0.01, insig = "blank")
+# Insignificant correlations are left blank
+```
+
+### Normality
+
+Visual and quantitative methods were used to assess normality. For the visual assessment, histogram plots were created. Six variables roughly follow a normal bell curve: shoot biomass, SOC, xylose, pH, and phosphorus. The remaining variables demonstrate right-skewed distributions.
+
+Applying the Shapiro-Wilk test for normality, only three variables had p-values greater than or equal to 0.05: shoot biomass, SOC, and actino.
+
+All remaining variables were log transformed to meet normality assumptions following results of Shapiro-Wilk test.
+
+### Covariance
+
+The results of the covariance table are reported below. Several of the different indicators for plant, microbial, and soil properties exhibit positive and negative covariance with one another, eg shoot biomass and actinomycetes (positive), and actino and pH (negative).
+
+```{r}
+print(cov.tbl)
+```
+
+### Correlation
+
+The patterns observed in the covariance matrix are similar in the correlation analysis (see correlogram below). Correlations were completed using Spearman rather Pearson given the non-normality observed in the dataset.
+
+Shoot biomass shows strong positive correlations with P, negative correlation with pH, and a strong positive relationship with SOC. There is also a positive relationship between shoot biomass and plant diversity. Xylose respiration is positively related to SOC and shoot biomass.
+
+Percent clay exhibited a negative relationship to pH and a positive one to SOC.
+
+```{r}
+corrplot(cor.dtable$r, type="upper", order="hclust", 
+         p.mat = cor.dtable$P, sig.level = 0.01, insig = "blank")
+```
+
+## Data transformations and scaling
+
+Non-normal data were transformed to meet normality assumptions and all values scaled to match the largest order of magnitude in the dataset (ie actino).
+
+```{r data transformation, scaling}
+# isolate non-normal variables from Shapiro-Wilk test
+n.normal.sw.test.vars = sw.test.vars[distribution %like% "non.normal",]
+n.normal.sw.test.vars$variable
+
+# log transform data 
+# xylose
+sem.data[, `xylose.micro.g.co2-c.g.hr`:= log(`xylose.micro.g.co2-c.g.hr`)] 
+hist(as.vector(unlist(sem.data$`xylose.micro.g.co2-c.g.hr`)))
+
+sem.data[, pH := log(pH)] # pH
+hist(as.vector(unlist(sem.data$pH)))
+
+sem.data[, clay.percent := log(clay.percent)] # clay
+hist(as.vector(unlist(sem.data$clay.percent)))
+
+sem.data[, P.g.kg := log(P.g.kg)] # Phosphorus
+hist(as.vector(unlist(sem.data$P.g.kg)))
+
+sem.data[, plant.shannon.div := log(plant.shannon.div)] # Plant Shannon Diversity
+hist(as.vector(unlist(sem.data$plant.shannon.div)))
+
+# scale data
+mult.100 = function(x) {
+  x = x*100
+}
+sem.data.t = sem.data[, lapply(.SD,mult.100),.SDcols=c("shoot.biomass.Mg.C.ha", "xylose.micro.g.co2-c.g.hr","pH", "clay.percent", "P.g.kg", "plant.shannon.div")]
+sem.data.t = cbind(sem.data[,c(1:4,7:8)], sem.data.t)
+sem.data.t$xylose = sem.data.t$`xylose.micro.g.co2-c.g.hr`
+vartable(sem.data.t) # variance magnitude check
+# N.B. pH and P not included in SEM (redundant of compost)
+
+```
+
+### AICc evaluation
+
+The following function supports the evaluation of candidate models using AIC.
+
+```{r aictab SEM model selection setup, echo=FALSE}
+# source: C. Kelly 2022; should be from Jim Grace PPT
+AICc.lavaan<-function(object, second.ord=TRUE, c.hat = 1, return.K = FALSE){
+	object <- as.list(fitMeasures(object))
+  npar<-object$baseline.df - object$df
+	if(return.K==T) return(object$npar)
+	if(second.ord==F && c.hat>1) return(-2*object$logl/c.hat+2*npar)
+	if(second.ord==F) return(object$aic)
+    if(c.hat>1) return( -2*object$logl/c.hat+2*npar + 2*( npar*(object$npar+1))/(object$ntotal-npar-1))
+    object$aic + 2*( npar*(npar+1))/(object$ntotal-npar-1)
+}
+    
+aictab.lavaan<-function(cand.set, modnames, sort = TRUE, c.hat = 1, second.ord = TRUE, nobs = NULL){
+	if(is.null(modnames)) modnames<-1:length(cand.set)
+	# check.resp <- lapply(X = cand.set, FUN = function(b) formula(b)[2])
+   # if (length(unique(check.resp)) > 1) 
+   #     stop("You must use the same response variable for all models\n")
+    Results <- NULL
+    Results <- data.frame(Modnames = modnames)
+    Results$K <- unlist(lapply(X = cand.set, FUN = AICc.lavaan, 
+        return.K = TRUE, c.hat = c.hat,second.ord = second.ord))
+    Results$AICc <- unlist(lapply(X = cand.set, FUN = AICc.lavaan, 
+        return.K = FALSE, c.hat = c.hat,second.ord = second.ord))
+    Results$Delta_AICc <- Results$AICc - min(Results$AICc)
+    Results$ModelLik <- exp(-0.5 * Results$Delta_AICc)
+    Results$AICcWt <- Results$ModelLik/sum(Results$ModelLik)
+    if (length(unique(Results$AICc)) != length(cand.set)) 
+        warning("\nCheck model structure carefully as some models may be redundant\n")
+    if (second.ord == TRUE && c.hat == 1) {
+        Results$LL <- unlist(lapply(X = cand.set, FUN = function(i) logLik(i)[1]))
+    }
+    if (second.ord == TRUE && c.hat > 1) {
+        colnames(Results) <- c("Modnames", "K", "QAICc", "Delta QAICc", 
+            "ModelLik", "QAICcWt")
+        LL <- unlist(lapply(X = cand.set, FUN = function(i) logLik(i)[1]))
+        Results$Quasi.LL <- LL/c.hat
+        Results$c_hat <- c.hat
+    }
+    if (second.ord == FALSE && c.hat == 1) {
+        colnames(Results) <- c("Modnames", "K", "AIC", "Delta AIC", 
+            "ModelLik", "AICWt")
+        Results$LL <- unlist(lapply(X = cand.set, FUN = function(i) logLik(i)[1]))
+    }
+    if (second.ord == FALSE && c.hat > 1) {
+        colnames(Results) <- c("Modnames", "K", "QAIC", "Delta QAIC", 
+            "ModelLik", "QAICWt")
+        LL <- unlist(lapply(X = cand.set, FUN = function(i) logLik(i)[1]))
+        Results$Quasi.LL <- LL/c.hat
+        Results$c_hat <- c.hat
+    }
+    if (sort) {
+        Results <- Results[rev(order(Results[, 6])), ]
+        Results$Cum.Wt <- cumsum(Results[, 6])
+    }
+    else {
+        Results$Cum.Wt <- NULL
+    }
+    class(Results) <- c("aictab", "data.frame")
+    return(Results)
+	
+}
+```
+
+## Model selection
+
+These models are formulated around hypotheses about the dominant pathway for soil C formation under compost: plant mediated, microbial mediated, or jointly mediated. There are several ideas to test with each of these pathways:
+* Joint plant-microbe: plant > microbe
+* Plant mediated: shoot + root biomass only, plant diversity only, biomass + diversity
+* Microbe mediated: community only, function only, community + function
+
+```{r model selection, evaluation - final}
+#---------------------------------------------------------------------
+# Step 1: Specify Model.
+# Step 2: Estimate aka “fit” Model.
+# Step 3: Extract Results (both estimates and assessment of fit).
+#---------------------------------------------------------------------
+# For model comparison, all variables must be present in model https://www.researchgate.net/post/Comparing_SEMs_with_different_numbers_of_elements
+# See also: https://psu-psychology.github.io/psy-597-SEM/09_model_comparison/model_comparison.html#are-two-models-nested-non-nested-or-equivalent
+# Can fix effect of variable to 0 to include in model for comparison purposes
+#---------------------------------------------------------------------
+# dummy code compost
+sem.data.t[Trt %in% 'Compost', Trt := 1]
+sem.data.t[Trt %in% 'Control', Trt := 0]
+sem.data.t[, Trt := as.numeric(Trt)]
+
+# Hypothesis 1: Joint mediated (and various alt models)
+# first model testing soil and plant effects partially mediated through microbes 
+plant.microbe1.model = 'soc.Mg.ha ~ actino.nmol.g + xylose + shoot.biomass.Mg.C.ha + plant.shannon.div + clay.percent
+                        actino.nmol.g ~ shoot.biomass.Mg.C.ha
+                        xylose ~ shoot.biomass.Mg.C.ha
+                        shoot.biomass.Mg.C.ha ~ Trt
+                        plant.shannon.div ~ Trt
+                       '
+plant.microbe1.model.fit = sem(plant.microbe1.model, data = sem.data.t, missing = "FIML")
+summary(plant.microbe1.model.fit, fit.measures = TRUE, standardized = TRUE, rsquare = TRUE)
+show(plant.microbe1.model.fit)
+# fit p-value chi square < 0.553, chi-square 9.750, df 11
+# AIC 2121.5
+
+# explore missing links
+subset(modindices(plant.microbe1.model.fit), mi > 0.5) 
+# clay.percent ~ soc.Mg.ha = 3.684, rest well below 3.84 or do not make biological sense (shoot ~ clay)
+
+# no additional paths to add
+#---------------------------------------------------------------------
+# Alternative Models
+#---------------------------------------------------------------------
+# Hypothesis 2: soil C mediated through plants, microbes separately
+# no paths between plants and microbes
+plant.microbe2.model = 'soc.Mg.ha ~ actino.nmol.g + xylose + shoot.biomass.Mg.C.ha + plant.shannon.div + clay.percent
+                        actino.nmol.g ~ Trt
+                        xylose ~ Trt
+                        shoot.biomass.Mg.C.ha ~ Trt
+                        plant.shannon.div ~ Trt
+                       '
+plant.microbe2.model.fit = sem(plant.microbe2.model, data = sem.data.t, missing = "FIML")
+summary(plant.microbe2.model.fit, fit.measures = TRUE, standardized = TRUE, rsquare = TRUE)
+show(plant.microbe2.model.fit)
+# fit p-value chi square < 0.000, chi-square 41.584, df 11
+# AIC 2153.3
+
+# soil only mediated through plants
+# set microbe parameters to 0 to exclude completely
+plant.microbe3.model = 'soc.Mg.ha ~ 0*actino.nmol.g + 0*xylose + shoot.biomass.Mg.C.ha + plant.shannon.div + clay.percent
+                        actino.nmol.g ~ 0*Trt 
+                        xylose ~ 0*Trt
+                        shoot.biomass.Mg.C.ha ~ Trt
+                        plant.shannon.div ~ Trt
+                       '
+plant.microbe3.model.fit = sem(plant.microbe3.model, data = sem.data.t, missing = "FIML")
+summary(plant.microbe3.model.fit, fit.measures = TRUE, standardized = TRUE, rsquare = TRUE)
+show(plant.microbe3.model.fit)
+# fit p-value chi square < 0.000, chi-square 58.156
+# AIC 2161.9
+
+# plants on soil C fully mediated through microbes
+plant.microbe4.model = 'soc.Mg.ha ~ actino.nmol.g + xylose + clay.percent
+                        actino.nmol.g ~ shoot.biomass.Mg.C.ha
+                        xylose ~ shoot.biomass.Mg.C.ha + plant.shannon.div
+                        shoot.biomass.Mg.C.ha ~ Trt
+                        plant.shannon.div ~ Trt
+                       '
+plant.microbe4.model.fit = sem(plant.microbe4.model, data = sem.data.t, missing = "FIML")
+summary(plant.microbe4.model.fit, fit.measures = TRUE, standardized = TRUE, rsquare = TRUE)
+show(plant.microbe4.model.fit)
+# fit p-value chi square 0.478, chi-square 11.609
+# AIC 2121.3
+#---------------------------------------------------------------------
+# Model Evaluation 
+#---------------------------------------------------------------------
+# remove model 2, 3 from comparison because poorly fit data
+anova(plant.microbe1.model.fit, plant.microbe4.model.fit) 
+# Chi-square difference 1.859
+
+aictab.lavaan(list(plant.microbe1.model.fit, plant.microbe4.model.fit), c("Partial mediation", "Full mediation"))
+# AICc < 2 
+# However, relatively small difference in AICc and we should use Chi-square difference for selection.
+
+# R2
+summary(plant.microbe1.model.fit, rsq = TRUE, standardized = TRUE) 
+# standardized estimates
+standardizedSolution(plant.microbe1.model.fit, type = "std.all") 
+
+# For reporting
+# Reports of findings: All of the findings from an SEM analysis should be
+# reported, including latent variables, factor loadings, 
+# standard errors, p values, R2, standardized and unstandardized structure
+# coefficients, and graphic representations of the model.
+```
