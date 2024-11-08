@@ -1,4 +1,4 @@
-Sample_ID,Trt,Block,Year,Avg_H,Avg_Evenness,Avg_Richness
+Sample_ID,Trt,Block,Year,Avg_H,Avg_EH,Avg_Richness
 1,Compost,1,2018,0.62,0.19,3.5
 2,Control,1,2018,0.31,0.1,3
 3,Compost,2,2018,0.17,0.05,2

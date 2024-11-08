@@ -176,14 +176,11 @@ hist(as.vector(unlist(sem.data$clay.percent)))
 sem.data[, P.g.kg := log(P.g.kg)] # Phosphorus
 hist(as.vector(unlist(sem.data$P.g.kg)))
 
-sem.data[, plant.shannon.div := log(plant.shannon.div)] # Plant Shannon Diversity
-hist(as.vector(unlist(sem.data$plant.shannon.div)))
-
 # scale data
 mult.100 = function(x) {
   x = x*100
 }
-sem.data.t = sem.data[, lapply(.SD,mult.100),.SDcols=c("shoot.biomass.Mg.C.ha", "xylose.micro.g.co2-c.g.hr","pH", "clay.percent", "P.g.kg", "plant.shannon.div")]
+sem.data.t = sem.data[, lapply(.SD,mult.100),.SDcols=c("shoot.biomass.Mg.C.ha", "xylose.micro.g.co2-c.g.hr","pH", "clay.percent", "P.g.kg", "plant.EH")]
 sem.data.t = cbind(sem.data[,c(1:4,7:8)], sem.data.t)
 sem.data.t$xylose = sem.data.t$`xylose.micro.g.co2-c.g.hr`
 vartable(sem.data.t) # variance magnitude check
@@ -282,81 +279,99 @@ sem.data.t[, Trt := as.numeric(Trt)]
 
 # Hypothesis 1: Joint mediated (and various alt models)
 # first model testing soil and plant effects partially mediated through microbes 
-plant.microbe1.model = 'soc.Mg.ha ~ actino.nmol.g + xylose + shoot.biomass.Mg.C.ha + plant.shannon.div + clay.percent
+plant.microbe1.model = 'soc.Mg.ha ~ actino.nmol.g + xylose + shoot.biomass.Mg.C.ha + plant.EH + clay.percent
+                        xylose ~ actino.nmol.g
                         actino.nmol.g ~ shoot.biomass.Mg.C.ha
                         xylose ~ shoot.biomass.Mg.C.ha
                         shoot.biomass.Mg.C.ha ~ Trt
-                        plant.shannon.div ~ Trt
+                        plant.EH ~ Trt
                        '
 plant.microbe1.model.fit = sem(plant.microbe1.model, data = sem.data.t, missing = "FIML")
 summary(plant.microbe1.model.fit, fit.measures = TRUE, standardized = TRUE, rsquare = TRUE)
 show(plant.microbe1.model.fit)
-# fit p-value chi square < 0.553, chi-square 9.750, df 11
-# AIC 2121.5
+# fit p-value chi square = 0.003, chi-square 26.692, df 10
+# AIC 2007.258
 
 # explore missing links
 subset(modindices(plant.microbe1.model.fit), mi > 0.5) 
-# clay.percent ~ soc.Mg.ha = 3.684, rest well below 3.84 or do not make biological sense (shoot ~ clay)
+# plant.EH ~ xylose, rest well below 3.84 or do not make biological sense (shoot ~ clay)
 
-# no additional paths to add
+# revise model 1
+plant.microbe1.rev.model = 'soc.Mg.ha ~ actino.nmol.g + xylose + shoot.biomass.Mg.C.ha + plant.EH + clay.percent
+                        xylose ~ actino.nmol.g
+                        actino.nmol.g ~ shoot.biomass.Mg.C.ha
+                        xylose ~ shoot.biomass.Mg.C.ha + plant.EH
+                        shoot.biomass.Mg.C.ha ~ Trt
+                        plant.EH ~ Trt
+                       '
+plant.microbe1.rev.model.fit = sem(plant.microbe1.rev.model, data = sem.data.t, missing = "FIML")
+summary(plant.microbe1.rev.model.fit, fit.measures = TRUE, standardized = TRUE, rsquare = TRUE)
+show(plant.microbe1.rev.model.fit)
+# fit p-value chi square < 0.19, chi-square 12.395, df 9
+# AIC 2007.258
+# explore missing links
+subset(modindices(plant.microbe1.rev.model.fit), mi > 0.5) 
+# rest well below 3.84 or do not make biological sense
 #---------------------------------------------------------------------
 # Alternative Models
 #---------------------------------------------------------------------
 # Hypothesis 2: soil C mediated through plants, microbes separately
 # no paths between plants and microbes
-plant.microbe2.model = 'soc.Mg.ha ~ actino.nmol.g + xylose + shoot.biomass.Mg.C.ha + plant.shannon.div + clay.percent
+plant.microbe2.model = 'soc.Mg.ha ~ actino.nmol.g + xylose + shoot.biomass.Mg.C.ha + plant.EH + clay.percent
+                        xylose ~ actino.nmol.g
                         actino.nmol.g ~ Trt
                         xylose ~ Trt
                         shoot.biomass.Mg.C.ha ~ Trt
-                        plant.shannon.div ~ Trt
+                        plant.EH ~ Trt
                        '
 plant.microbe2.model.fit = sem(plant.microbe2.model, data = sem.data.t, missing = "FIML")
 summary(plant.microbe2.model.fit, fit.measures = TRUE, standardized = TRUE, rsquare = TRUE)
 show(plant.microbe2.model.fit)
-# fit p-value chi square < 0.000, chi-square 41.584, df 11
-# AIC 2153.3
+# fit p-value chi square < 0.000, chi-square 54.312, df 10
+# AIC 2034.877
 
 # soil only mediated through plants
 # set microbe parameters to 0 to exclude completely
-plant.microbe3.model = 'soc.Mg.ha ~ 0*actino.nmol.g + 0*xylose + shoot.biomass.Mg.C.ha + plant.shannon.div + clay.percent
+plant.microbe3.model = 'soc.Mg.ha ~ 0*actino.nmol.g + 0*xylose + shoot.biomass.Mg.C.ha + plant.EH + clay.percent
                         actino.nmol.g ~ 0*Trt 
                         xylose ~ 0*Trt
                         shoot.biomass.Mg.C.ha ~ Trt
-                        plant.shannon.div ~ Trt
+                        plant.EH ~ Trt
                        '
 plant.microbe3.model.fit = sem(plant.microbe3.model, data = sem.data.t, missing = "FIML")
 summary(plant.microbe3.model.fit, fit.measures = TRUE, standardized = TRUE, rsquare = TRUE)
 show(plant.microbe3.model.fit)
-# fit p-value chi square < 0.000, chi-square 58.156
-# AIC 2161.9
+# fit p-value chi square < 0.000, chi-square 69.574, df 15
+# AIC 2040.139
 
-# plants on soil C fully mediated through microbes
+# plant effect on soil C fully mediated through microbes
 plant.microbe4.model = 'soc.Mg.ha ~ actino.nmol.g + xylose + clay.percent
+                        xylose ~ actino.nmol.g
                         actino.nmol.g ~ shoot.biomass.Mg.C.ha
-                        xylose ~ shoot.biomass.Mg.C.ha + plant.shannon.div
+                        xylose ~ shoot.biomass.Mg.C.ha + plant.EH
                         shoot.biomass.Mg.C.ha ~ Trt
-                        plant.shannon.div ~ Trt
+                        plant.EH ~ Trt
                        '
 plant.microbe4.model.fit = sem(plant.microbe4.model, data = sem.data.t, missing = "FIML")
 summary(plant.microbe4.model.fit, fit.measures = TRUE, standardized = TRUE, rsquare = TRUE)
 show(plant.microbe4.model.fit)
-# fit p-value chi square 0.478, chi-square 11.609
-# AIC 2121.3
+# fit p-value chi square 0.233, chi-square 14.003, df 11
+# AIC 1992.569
+subset(modindices(plant.microbe4.model.fit), mi > 0.5) 
 #---------------------------------------------------------------------
 # Model Evaluation 
 #---------------------------------------------------------------------
 # remove model 2, 3 from comparison because poorly fit data
-anova(plant.microbe1.model.fit, plant.microbe4.model.fit) 
-# Chi-square difference 1.859
+anova(plant.microbe1.rev.model.fit, plant.microbe4.model.fit) 
+# Chi-square difference 1.61
 
-aictab.lavaan(list(plant.microbe1.model.fit, plant.microbe4.model.fit), c("Partial mediation", "Full mediation"))
-# AICc < 2 
-# However, relatively small difference in AICc and we should use Chi-square difference for selection.
+aictab.lavaan(list(plant.microbe1.rev.model.fit, plant.microbe4.model.fit), c("Partial mediation", "Full mediation"))
+# AICc = 5 
 
 # R2
-summary(plant.microbe1.model.fit, rsq = TRUE, standardized = TRUE) 
+summary(plant.microbe4.model.fit, rsq = TRUE, standardized = TRUE) 
 # standardized estimates
-standardizedSolution(plant.microbe1.model.fit, type = "std.all") 
+standardizedSolution(plant.microbe4.model.fit, type = "std.all") 
 
 # For reporting
 # Reports of findings: All of the findings from an SEM analysis should be

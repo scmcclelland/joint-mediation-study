@@ -1,7 +1,7 @@
 # Plant Biomass and Community Analysis Script 
 # Author: Shelby C McClelland
 # Created:     20 December 2020
-# Last Update: 02 August 2024
+# Last Update: 02 November 2024
 # Description: This file analyzes soil chemical property data.
 #-------------------------------------------------------------------------------
 # Analysis notes:
@@ -244,38 +244,22 @@ biomass_p = grid.arrange(shoot_bio_gg, t_root_bio_gg, c_root_bio_gg, f_root_bio_
 ggsave("EcolLetters_Biomass.tiff", plot = biomass_p, path = figures_path, width = 11, height = 8, units = "in", dpi = 300)
 #-------------------------------------------------------------------------------
 # Plant Community Analyses
-# Shannon H
-variable = 'Avg_H'
-bwp.H = boxplot_check2(div_dt, 'Avg_H')
+# Shannon Equitability Index (EH)
+variable = 'Avg_EH'
+bwp.EH   = boxplot_check2(div_dt, 'Avg_EH')
 
-div_H_dt  = div_dt[, c('Sample_ID', 'Trt', 'Block', 'Year', 'Avg_H')]
-div_H_dt[!is.na(Avg_H), count := as.numeric(1L)]
-div_H_dt[is.na(Avg_H),  count := as.numeric(0L)]
+div_EH_dt  = div_dt[, c('Sample_ID', 'Trt', 'Block', 'Year', 'Avg_EH')]
+div_EH_dt[!is.na(Avg_EH), count := as.numeric(1L)]
+div_EH_dt[is.na(Avg_EH),  count := as.numeric(0L)]
 
-summary_div_H = div_H_dt[, .(
-  n           = sum(count),
-  mean_total  = round(mean(Avg_H, na.rm = TRUE), digits = 1),
-  sd          = round(sd(Avg_H, na.rm = TRUE), digits  = 1)),
-  by          = .(Trt, Year)]
-summary_div_H[, SE := round(sqrt(sd/n), digits = 1)]
-
-div_H_MM   = repeated_MM2(div_H_dt, variable)
-# Evenness
-variable = 'Avg_Evenness'
-bwp.Ev   = boxplot_check2(div_dt, 'Avg_Evenness')
-
-div_Ev_dt  = div_dt[, c('Sample_ID', 'Trt', 'Block', 'Year', 'Avg_Evenness')]
-div_Ev_dt[!is.na(Avg_Evenness), count := as.numeric(1L)]
-div_Ev_dt[is.na(Avg_Evenness),  count := as.numeric(0L)]
-
-summary_div_Ev = div_Ev_dt[, .(
+summary_div_EH = div_EH_dt[, .(
   n            = sum(count),
-  mean_total   = round(mean(Avg_Evenness, na.rm = TRUE), digits = 1),
-  sd           = round(sd(Avg_Evenness, na.rm = TRUE), digits  = 1)),
+  mean_total   = round(mean(Avg_EH, na.rm = TRUE), digits = 1),
+  sd           = round(sd(Avg_EH, na.rm = TRUE), digits  = 1)),
   by           = .(Trt, Year)]
-summary_div_Ev[, SE := round(sqrt(sd/n), digits = 1)]
+summary_div_EH[, SE := round(sqrt(sd/n), digits = 1)]
 
-div_Ev_MM   = repeated_MM2(div_Ev_dt, variable)
+div_EH_MM   = repeated_MM2(div_EH_dt, variable)
 # Richness
 variable = 'Avg_Richness'
 bwp.Ri = boxplot_check2(div_dt, 'Avg_Richness')
@@ -295,25 +279,22 @@ div_Ri_MM   = repeated_MM2(div_Ri_dt, variable)
 #-------------------------------------------------------------------------------
 # Output Tables
 # Plant diversity metrics
-sink(paste(tables_path, 'Shannon_Plant_Diversity_Repeated_Measures_Results.txt', sep = '/'))
-print(div_H_MM)
-sink()
-sink(paste(tables_path, 'Plant_Diversity_Evenness_Repeated_Measures_Results.txt', sep = '/'))
-print(div_Ev_MM)
+sink(paste(tables_path, 'Plant_Diversity_ShannonEq_Repeated_Measures_Results.txt', sep = '/'))
+print(div_EH_MM)
 sink()
 sink(paste(tables_path, 'Plant_Diversity_Richness_Repeated_Measures_Results.txt', sep = '/'))
 print(div_Ri_MM)
 sink()
 #-------------------------------------------------------------------------------
 # Create Plant Diversity Figures
-div_H_gg <- ggplot(div_dt,aes(x = Trt, y = Avg_H, fill = Trt, group = Trt)) +
+div_EH_gg <- ggplot(div_dt,aes(x = Trt, y = Avg_EH, fill = Trt, group = Trt)) +
   stat_boxplot(geom = "errorbar", width = 0.5) +  
   geom_boxplot(alpha = 0.9) +
   stat_summary(fun=mean, geom="point", shape=23, size=4) +
-  ylim(0.0,1.5) +
+  ylim(0.0,1.0) +
   facet_grid(~ Year) +
   scale_fill_viridis(discrete = TRUE, option = "D", begin = 0.6, end = 0.2) +
-  ylab("Shannon Diversity (H)") +
+  ylab("Shannon Equitability Index") +
   xlab("Treatment") +
   theme_classic() +
   theme(text=element_text(size=13, color = 'black'),
@@ -326,29 +307,7 @@ div_H_gg <- ggplot(div_dt,aes(x = Trt, y = Avg_H, fill = Trt, group = Trt)) +
         legend.title=element_text(size = 13, color = 'black'),
         legend.position = "none") +
   guides(fill=guide_legend(title="Treatment"))
-div_H_gg
-
-div_Ev_gg <- ggplot(div_dt,aes(x = Trt, y = Avg_Evenness, fill = Trt, group = Trt)) +
-  stat_boxplot(geom = "errorbar", width = 0.5) +  
-  geom_boxplot(alpha = 0.9) +
-  stat_summary(fun=mean, geom="point", shape=23, size=4) +
-  ylim(0.0,1.5) +
-  facet_grid(~ Year) +
-  scale_fill_viridis(discrete = TRUE, option = "D", begin = 0.6, end = 0.2) +
-  ylab("Plant Species Evenness") +
-  xlab("Treatment") +
-  theme_classic() +
-  theme(text=element_text(size=13, color = 'black'),
-        strip.text.x = element_text(size = 13, color = 'black'),
-        axis.text=element_text(size=13, color = 'black'),
-        axis.text.x = element_blank(),
-        axis.ticks.x = element_blank(),
-        # axis.title.y =  element_blank(),
-        axis.title.x = element_blank(),
-        legend.title=element_text(size = 13, color = 'black'),
-        legend.position = "none") +
-  guides(fill=guide_legend(title="Treatment"))
-div_Ev_gg
+div_EH_gg
 
 div_Ri_gg <- ggplot(div_dt,aes(x = Trt, y = Avg_Richness, fill = Trt, group = Trt)) +
   stat_boxplot(geom = "errorbar", width = 0.5) +  
@@ -373,8 +332,8 @@ div_Ri_gg <- ggplot(div_dt,aes(x = Trt, y = Avg_Richness, fill = Trt, group = Tr
 div_Ri_gg
 #-------------------------------------------------------------------------------
 # Combine plots
-div_p = grid.arrange(div_H_gg, div_Ev_gg, div_Ri_gg,
-                         nrow = 3, ncol = 1)
+div_p = grid.arrange(div_EH_gg, div_Ri_gg,
+                         nrow = 2, ncol = 1)
 ggsave("EcolLetters_PlantDiversity.tiff", plot = div_p, path = figures_path, width = 6, height = 9, units = "in", dpi = 300)
 #-------------------------------------------------------------------------------
 # Relative Abundance 
