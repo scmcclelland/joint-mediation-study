@@ -2,7 +2,7 @@
 # Author: Shelby C McClelland
 # Created:     20 December 2020
 # Last Update: 22 February 2025
-# Description: This file analyzes soil chemical property data.
+# Description: This file analyzes PLFA data.
 #-------------------------------------------------------------------------------
 ## Analysis notes:
 # Repeated measures analysis

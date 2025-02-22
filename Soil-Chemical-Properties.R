@@ -1,7 +1,7 @@
 # Soil Chemical Properties Analysis Script 
 # Author: Shelby C McClelland
 # Created:     20 December 2020
-# Last Update: 02 August 2024
+# Last Update: 22 February 2025
 # Description: This file analyzes soil chemical property data.
 #-------------------------------------------------------------------------------
 ## Analysis notes:
@@ -20,11 +20,15 @@ library(dplyr)
 library(car)
 library(emmeans)
 library(ggplot2)
+library(ggtext)
+library(grid)
+library(gridExtra)
 library(lattice)
 library(lmerTest)
 library(lme4)
 library(RColorBrewer)
 library(rstudioapi)
+library(viridis)
 #-------------------------------------------------------------------------------
 # Load directory paths
 base_path    = dirname(getActiveDocumentContext()$path)
@@ -148,3 +152,46 @@ sink(paste(tables_path, 'SOC_Repeated_Measures_Results.txt', sep = '/'))
 print(SOC_0_10cm)
 print(SOC_10_20cm)
 sink()
+#-------------------------------------------------------------------------------
+# Create Shoot Biomass Figures
+soc_gg = ggplot(soilC_dt[Depth == '0to10'],aes(x = Trt, y = soc.Mg.ha, fill = Trt, group = Trt)) +
+  stat_boxplot(geom = "errorbar", width = 0.5) +  
+  geom_boxplot(alpha = 0.9) +
+  stat_summary(fun=mean, geom="point", shape=23, size=3) +
+  ylim(0.0,35) +
+  facet_grid(~ Year, labeller = label_parsed) +
+  scale_fill_viridis(discrete = TRUE, option = "D", begin = 0.6, end = 0.2) +
+  ylab(expression("Soil Organic Carbon (Mg C ha"^-1*")")) +
+  xlab("Treatment") +
+  theme_bw() +
+  theme(text=element_text(size=7, color = 'black'),
+        axis.title = element_text(size = 8, color = 'black'),
+        strip.text.x = element_text(size = 7, color = 'black'),
+        axis.text=element_text(size=7, color = 'black'),
+        # axis.text.x = element_blank(),
+        # axis.ticks.x = element_blank(),
+        # axis.title.y =  element_blank(),
+        # axis.title.x = element_blank(),
+        legend.title=element_text(size = 7, color = 'black'),
+        legend.position = "none",
+        plot.title.position = "plot",  # This moves the title to align with plot edge
+        plot.title = element_text(
+          hjust = -0.005,  # Slight adjustment left of the plot
+          vjust = -0.5,   # Slight adjustment above the plot
+          size = 7       # Match your other text size if needed
+        )) +
+  guides(fill=guide_legend(title="Treatment"))
+soc_gg
+
+# add P-values
+text = data.table(Trt = 'Compost', soc.Mg.ha = 32, lab = "P = 0.001",
+                  Year  = factor(c("2018"),levels = c("2018","2020")))
+soc_gg = soc_gg + geom_text(data = text, label = "P = 0.007", 
+                                        nudge_x = 0.5, size = 3)
+text = data.table(Trt = 'Compost', soc.Mg.ha = 32, lab = "P = 0.001",
+                  Year  = factor(c("2020"),levels = c("2018","2020")))
+soc_gg = soc_gg + geom_text(data = text, label = "P < 0.001", 
+                                        nudge_x = 0.5, size = 3)
+soc_gg
+
+ggsave("FigureS2.tiff", plot = soc_gg, path = figures_path, width = 88, height = 88, units = "mm", dpi = 600)

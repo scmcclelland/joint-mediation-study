@@ -2,7 +2,7 @@
 # Author: Shelby C McClelland
 # Created:     20 December 2020
 # Last Update: 22 February 2025
-# Description: This file analyzes soil chemical property data.
+# Description: This file analyzes plant biomass and community data.
 #-------------------------------------------------------------------------------
 # Analysis notes:
 # Repeated measures analysis
@@ -526,18 +526,19 @@ sink()
 # easier to see with Festuca removed
 lnRR_gg = ggplot(lnRR_dt[!Species %like% 'Festuca'],aes(x = Species, y = m_lnRR)) +
   geom_point(size = 3, color = 'black') + 
-  geom_errorbar(aes(ymin = l_CI, ymax = u_CI), width = .2,
+  geom_errorbar(aes(ymin = l_CI, ymax = u_CI), width = 0.1,
                 position=position_dodge(0.05)) +
   coord_flip() + 
   geom_hline(yintercept = 0) +
   # scale_fill_viridis(discrete = TRUE, option = "D", begin = 0.6, end = 0.2) +
   ylab("lnRR") +
   theme_bw() +
-  theme(text=element_text(size=13, color = 'black'),
-        strip.text.x = element_text(size = 13, color = 'black'), 
+  theme(text=element_text(size=7, color = 'black'),
+        axis.title = element_text(size = 8, color = 'black'),
+        strip.text.x = element_text(size = 7, color = 'black'), 
         axis.text.y = element_text(face = "italic"),
         axis.title.y = element_blank(),
-        axis.text=element_text(size=13, color = 'black'),
+        axis.text=element_text(size=7, color = 'black'),
         legend.position = "none")
 lnRR_gg
-ggsave("EcolLetters_lnRR.tiff", plot = lnRR_gg, path = figures_path, width = 5, height = 5, units = "in", dpi = 300)
+ggsave("FigureS3.tiff", plot = lnRR_gg, path = figures_path, width = 88, height = 88, units = "mm", dpi = 600)
