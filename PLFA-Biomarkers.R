@@ -1,7 +1,7 @@
 # PLFA Biomarkers Analysis Script 
 # Author: Shelby C McClelland
 # Created:     20 December 2020
-# Last Update: 02 August 2024
+# Last Update: 22 February 2025
 # Description: This file analyzes soil chemical property data.
 #-------------------------------------------------------------------------------
 ## Analysis notes:
@@ -240,91 +240,181 @@ f_labels = c('Post.2018'= '2018', 'Post.2019' = '2019', 'Post.2020' = '2020')
 plfa_bio_gg = ggplot(plfa_dt[Year %in% c('Post.2018','Post.2019','Post.2020')],aes(x = Trt, y = tot.biomass, fill = Trt, group = Trt)) +
   stat_boxplot(geom = "errorbar", width = 0.5) +  
   geom_boxplot(alpha = 0.9) +
-  stat_summary(fun=mean, geom="point", shape=23, size=4) +
+  stat_summary(fun=mean, geom="point", shape=23, size=3) +
   ylim(0.0,1560) +
   facet_grid(~ Year, labeller = labeller(Year = f_labels)) +
   scale_fill_viridis(discrete = TRUE, option = "D", begin = 0.6, end = 0.2) +
   ylab(expression("PLFA Biomass (nmol g"^-1*")")) +
   xlab("Treatment") +
-  theme_classic() +
-  theme(text=element_text(size=13, color = 'black'),
-        strip.text.x = element_text(size = 13, color = 'black'),
-        axis.text=element_text(size=13, color = 'black'),
+  theme_bw() +
+  theme(text=element_text(size=7, color = 'black'),
+        axis.title = element_text(size = 8, color = 'black'),
+        strip.text.x = element_text(size = 7, color = 'black'),
+        axis.text=element_text(size=7, color = 'black'),
         axis.text.x = element_blank(),
         axis.ticks.x = element_blank(),
-        axis.title.y =  element_blank(),
+        # axis.title.y =  element_blank(),
         axis.title.x = element_blank(),
-        legend.title=element_text(size = 13, color = 'black'),
-        legend.position = "none") +
-  guides(fill=guide_legend(title="Treatment"))
+        legend.title=element_text(size = 7, color = 'black'),
+        legend.position = "none",
+        plot.title.position = "plot",  # This moves the title to align with plot edge
+        plot.title = element_text(
+          hjust = -0.005,  # Slight adjustment left of the plot
+          vjust = -0.5,   # Slight adjustment above the plot
+          size = 7       # Match your other text size if needed
+        )) +
+  guides(fill=guide_legend(title="Treatment")) +
+  ggtitle('(a)')
+plfa_bio_gg
+
+# add P values
+text = data.table(Trt = 'Compost', tot.biomass = 1500, lab = "n.s.",
+                  Year  = factor(c("Post.2018"),levels = c("Post.2018","Post.2019","Post.2020")))
+plfa_bio_gg = plfa_bio_gg + geom_text(data = text, label = "n.s.", 
+                                  nudge_x = 0.5, size = 3)
+text = data.table(Trt = 'Compost', tot.biomass = 1500, lab = "n.s.",
+                  Year  = factor(c("Post.2019"),levels = c("Post.2018","Post.2019","Post.2020")))
+plfa_bio_gg = plfa_bio_gg + geom_text(data = text, label = "n.s.", 
+                                  nudge_x = 0.5, size = 3)
+text = data.table(Trt = 'Compost', tot.biomass = 1500, lab = "P = 0.07",
+                  Year  = factor(c("Post.2020"),levels = c("Post.2018","Post.2019","Post.2020")))
+plfa_bio_gg = plfa_bio_gg + geom_text(data = text, label = "P = 0.07", 
+                                  nudge_x = 0.5, size = 3)
 plfa_bio_gg
 
 bacteria_bio_gg = ggplot(plfa_grouped[Year %in% c('Post.2018','Post.2019','Post.2020')],aes(x = Trt, y = bacteria, fill = Trt, group = Trt)) +
   stat_boxplot(geom = "errorbar", width = 0.5) +  
   geom_boxplot(alpha = 0.9) +
-  stat_summary(fun=mean, geom="point", shape=23, size=4) +
+  stat_summary(fun=mean, geom="point", shape=23, size=3) +
   ylim(0.0,850) +
   facet_grid(~ Year, labeller = labeller(Year = f_labels)) +
   scale_fill_viridis(discrete = TRUE, option = "D", begin = 0.6, end = 0.2) +
   ylab(expression("PLFA Biomass (nmol g"^-1*")")) +
   xlab("Treatment") +
-  theme_classic() +
-  theme(text=element_text(size=13, color = 'black'),
-        strip.text.x = element_text(size = 13, color = 'black'),
-        axis.text=element_text(size=13, color = 'black'),
+  theme_bw() +
+  theme(text=element_text(size=7, color = 'black'),
+        axis.title = element_text(size = 8, color = 'black'),
+        strip.text.x = element_text(size = 7, color = 'black'),
+        axis.text=element_text(size=7, color = 'black'),
         axis.text.x = element_blank(),
-        axis.title.x = element_blank(),
-        axis.title.y =  element_blank(),
         axis.ticks.x = element_blank(),
-        legend.title=element_text(size = 13, color = 'black'),
-        legend.position = "none") +
-  guides(fill=guide_legend(title="Treatment"))
+        # axis.title.y =  element_blank(),
+        axis.title.x = element_blank(),
+        legend.title=element_text(size = 7, color = 'black'),
+        legend.position = "none",
+        plot.title.position = "plot",  # This moves the title to align with plot edge
+        plot.title = element_text(
+          hjust = -0.005,  # Slight adjustment left of the plot
+          vjust = -0.5,   # Slight adjustment above the plot
+          size = 7       # Match your other text size if needed
+        )) +
+  guides(fill=guide_legend(title="Treatment")) +
+  ggtitle('(b)')
+bacteria_bio_gg
+
+# add P values
+text = data.table(Trt = 'Compost', bacteria = 800, lab = "n.s.",
+                  Year  = factor(c("Post.2018"),levels = c("Post.2018","Post.2019","Post.2020")))
+bacteria_bio_gg = bacteria_bio_gg + geom_text(data = text, label = "n.s.", 
+                                      nudge_x = 0.5, size = 3)
+text = data.table(Trt = 'Compost', bacteria = 800, lab = "n.s.",
+                  Year  = factor(c("Post.2019"),levels = c("Post.2018","Post.2019","Post.2020")))
+bacteria_bio_gg = bacteria_bio_gg + geom_text(data = text, label = "n.s.", 
+                                      nudge_x = 0.5, size = 3)
+text = data.table(Trt = 'Compost', bacteria = 800, lab = "P = 0.09",
+                  Year  = factor(c("Post.2020"),levels = c("Post.2018","Post.2019","Post.2020")))
+bacteria_bio_gg = bacteria_bio_gg + geom_text(data = text, label = "P = 0.09", 
+                                      nudge_x = 0.5, size = 3)
 bacteria_bio_gg
 
 g_pos_bio_gg = ggplot(plfa_grouped[Year %in% c('Post.2018','Post.2019','Post.2020')],aes(x = Trt, y = g_pos, fill = Trt, group = Trt)) +
   stat_boxplot(geom = "errorbar", width = 0.5) +  
   geom_boxplot(alpha = 0.9) +
-  stat_summary(fun=mean, geom="point", shape=23, size=4) +
+  stat_summary(fun=mean, geom="point", shape=23, size=3) +
   ylim(0.0,850) +
   facet_grid(~ Year, labeller = labeller(Year = f_labels)) +
   scale_fill_viridis(discrete = TRUE, option = "D", begin = 0.6, end = 0.2) +
   ylab(expression("PLFA Biomass (nmol g"^-1*")")) +
   xlab("Treatment") +
-  theme_classic() +
-  theme(text=element_text(size=13, color = 'black'),
-        strip.text.x = element_text(size = 13, color = 'black'),
-        axis.text=element_text(size=13, color = 'black'),
+  theme_bw() +
+  theme(text=element_text(size=7, color = 'black'),
+        axis.title = element_text(size = 8, color = 'black'),
+        strip.text.x = element_text(size = 7, color = 'black'),
+        axis.text=element_text(size=7, color = 'black'),
         axis.title.y =  element_blank(),
         axis.ticks.x = element_blank(),
-        legend.title=element_text(size = 13, color = 'black'),
-        legend.position = "none") +
-  guides(fill=guide_legend(title="Treatment"))
+        legend.title=element_text(size = 7, color = 'black'),
+        legend.position = "none",
+        plot.title.position = "plot",  # This moves the title to align with plot edge
+        plot.title = element_text(
+          hjust = -0.005,  # Slight adjustment left of the plot
+          vjust = -0.5,   # Slight adjustment above the plot
+          size = 7       # Match your other text size if needed
+        )) +
+  guides(fill=guide_legend(title="Treatment")) +
+  ggtitle('(c)')
+g_pos_bio_gg
+
+# add P values
+text = data.table(Trt = 'Compost', g_pos = 800, lab = "n.s.",
+                  Year  = factor(c("Post.2018"),levels = c("Post.2018","Post.2019","Post.2020")))
+g_pos_bio_gg = g_pos_bio_gg + geom_text(data = text, label = "n.s.", 
+                                              nudge_x = 0.5, size = 3)
+text = data.table(Trt = 'Compost', g_pos = 800, lab = "n.s.",
+                  Year  = factor(c("Post.2019"),levels = c("Post.2018","Post.2019","Post.2020")))
+g_pos_bio_gg = g_pos_bio_gg + geom_text(data = text, label = "n.s.", 
+                                              nudge_x = 0.5, size = 3)
+text = data.table(Trt = 'Compost', g_pos = 800, lab = "P = 0.06",
+                  Year  = factor(c("Post.2020"),levels = c("Post.2018","Post.2019","Post.2020")))
+g_pos_bio_gg = g_pos_bio_gg + geom_text(data = text, label = "P = 0.06", 
+                                              nudge_x = 0.5, size = 3)
 g_pos_bio_gg
 
 actino_bio_gg = ggplot(plfa_grouped[Year %in% c('Post.2018','Post.2019','Post.2020')],aes(x = Trt, y = actino, fill = Trt, group = Trt)) +
   stat_boxplot(geom = "errorbar", width = 0.5) +  
   geom_boxplot(alpha = 0.9) +
-  stat_summary(fun=mean, geom="point", shape=23, size=4) +
+  stat_summary(fun=mean, geom="point", shape=23, size=3) +
   ylim(0.0,850) +
   facet_grid(~ Year, labeller = labeller(Year = f_labels)) +
   scale_fill_viridis(discrete = TRUE, option = "D", begin = 0.6, end = 0.2) +
   ylab(expression("PLFA Biomass (nmol g"^-1*")")) +
   xlab("Treatment") +
-  theme_classic() +
-  theme(text=element_text(size=13, color = 'black'),
-        strip.text.x = element_text(size = 13, color = 'black'),
-        axis.text    = element_text(size=13, color = 'black'),
+  theme_bw() +
+  theme(text=element_text(size=7, color = 'black'),
+        axis.title = element_text(size = 8, color = 'black'),
+        strip.text.x = element_text(size = 7, color = 'black'),
+        axis.text=element_text(size=7, color = 'black'),
         axis.title.y =  element_blank(),
         axis.ticks.x = element_blank(),
-        legend.title = element_text(size = 13, color = 'black'),
-        legend.position = "none") +
-  guides(fill=guide_legend(title="Treatment"))
+        legend.title=element_text(size = 7, color = 'black'),
+        legend.position = "none",
+        plot.title.position = "plot",  # This moves the title to align with plot edge
+        plot.title = element_text(
+          hjust = -0.005,  # Slight adjustment left of the plot
+          vjust = -0.5,   # Slight adjustment above the plot
+          size = 7       # Match your other text size if needed
+        )) +
+  guides(fill=guide_legend(title="Treatment")) +
+  ggtitle('(d)')
 actino_bio_gg
+
+# add P values
+text = data.table(Trt = 'Compost', actino = 800, lab = "n.s.",
+                  Year  = factor(c("Post.2018"),levels = c("Post.2018","Post.2019","Post.2020")))
+actino_bio_gg = actino_bio_gg + geom_text(data = text, label = "n.s.", 
+                                        nudge_x = 0.5, size = 3)
+text = data.table(Trt = 'Compost', actino = 800, lab = "n.s.",
+                  Year  = factor(c("Post.2019"),levels = c("Post.2018","Post.2019","Post.2020")))
+actino_bio_gg = actino_bio_gg + geom_text(data = text, label = "n.s.", 
+                                        nudge_x = 0.5, size = 3)
+text = data.table(Trt = 'Compost', actino = 800, lab = "P = 0.05",
+                  Year  = factor(c("Post.2020"),levels = c("Post.2018","Post.2019","Post.2020")))
+actino_bio_gg = actino_bio_gg + geom_text(data = text, label = "P = 0.05", 
+                                        nudge_x = 0.5, size = 3)
+actino_bio_gg
+
 #-------------------------------------------------------------------------------
 # Combine plots
-yleft = textGrob(expression(paste("PLFA Biomass (nmol g"^-1*")")), 
-                 rot = 90, gp = gpar(fontsize = 16))
 plfa_p = grid.arrange(plfa_bio_gg, bacteria_bio_gg, g_pos_bio_gg, actino_bio_gg,
-                         nrow = 2, ncol = 2,
-                         left = yleft)
-ggsave("EcolLetters_PLFA.tiff", plot = plfa_p, path = figures_path, width = 11, height = 8, units = "in", dpi = 300)
+                         nrow = 2, ncol = 2)
+ggsave("Figure3.tiff", plot = plfa_p, path = figures_path, width = 180, height = 180, units = "mm", dpi = 600)

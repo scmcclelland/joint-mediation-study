@@ -1,7 +1,7 @@
 # MicroResp Analysis Script 
 # Author: Shelby C McClelland
 # Created:     20 December 2020
-# Last Update: 18 April 2024
+# Last Update: 22 February 2025
 # Description: This file analyzes MicroResp data.
 #-------------------------------------------------------------------------------
 ## Analysis notes:
@@ -128,18 +128,94 @@ MR_substr_gg = ggplot(mr_dt[!Substrate %in% 'Water'],aes(x = Substrate, y = CO2,
                                  fill = Trt)) +
   stat_boxplot(geom = "errorbar") +  
   geom_boxplot(alpha = 0.9) +
-  stat_summary(fun=mean, geom="point", shape=23, size=2, position = position_dodge(width = 0.75), aes(group = interaction(Trt, Substrate))) +
+  stat_summary(fun=mean, geom="point", shape=23, size=2, 
+               position = position_dodge(width = 0.75), 
+               aes(group = interaction(Trt, Substrate))) +
   facet_wrap(~ Year, labeller = label_parsed, nrow = 3, ncol = 1) +
   scale_fill_viridis(discrete = TRUE, option = "D", begin = 0.6, end = 0.2) +
   ylab(expression("Substrate Induced Respiration ("*mu*"g CO"[2]*"-C g"^-1*" h"^-1*")")) +
   xlab("Substrate") +
-  theme_classic() +
-  theme(text=element_text(size=13, color = 'black'),
-        strip.text.x = element_text(size = 13, color = 'black'),
-        axis.text    = element_text(size=13, color = 'black'),
+  theme_bw() +
+  theme(text=element_text(size=7, color = 'black'),
+        axis.title = element_text(size = 8, color = 'black'),
+        strip.text.x = element_text(size = 7, color = 'black'),
+        axis.text    = element_text(size=7, color = 'black'),
         axis.ticks.x = element_blank(),
-        legend.title = element_text(size = 13, color = 'black'),
+        legend.title = element_text(size = 7, color = 'black'),
         legend.position = "none") +
   guides(fill=guide_legend(title="Treatment"))
 MR_substr_gg
-ggsave("EcolLetters_MR.tiff", plot = MR_substr_gg, path = figures_path, width = 8, height = 11, units = "in", dpi = 300)
+
+# add P-values by substrate x year
+# glucose
+text = data.table(
+  Year = unique(mr_dt$Year),  # year levels
+  Substrate = "Glucose",      # substrate position for the label
+  CO2   = c(5.5, 5, 0.5),       # position
+  Trt   = 'Compost',          # treatment
+  label = c('P = 0.06', 'n.s.', 'n.s.')
+)
+MR_substr_gg = MR_substr_gg +
+  geom_text(data = text,
+            aes(x = Substrate, y = CO2, label = label, group = NULL),
+            inherit.aes = FALSE,
+            size = 3    # Adjust size to match your theme
+  ) 
+# cellulose
+text = data.table(
+  Year = unique(mr_dt$Year),  # year levels
+  Substrate = "Cellulose",      # substrate position for the label
+  CO2   = c(5.5, 5, 5),       # position
+  Trt   = 'Compost',          # treatment
+  label = c('n.s.', 'n.s.', 'n.s.')
+)
+MR_substr_gg = MR_substr_gg +
+  geom_text(data = text,
+            aes(x = Substrate, y = CO2, label = label, group = NULL),
+            inherit.aes = FALSE,
+            size = 3    # Adjust size to match your theme
+  ) 
+# xylose
+text = data.table(
+  Year = unique(mr_dt$Year),  # year levels
+  Substrate = "Xylose",      # substrate position for the label
+  CO2   = c(5.5, 5, 5),       # position
+  Trt   = 'Compost',          # treatment
+  label = c('n.s.', 'n.s.', 'P = 0.06')
+)
+MR_substr_gg = MR_substr_gg +
+  geom_text(data = text,
+            aes(x = Substrate, y = CO2, label = label, group = NULL),
+            inherit.aes = FALSE,
+            size = 3    # Adjust size to match your theme
+  ) 
+# glucosamine
+text = data.table(
+  Year = unique(mr_dt$Year),  # year levels
+  Substrate = "Glucosamine",      # substrate position for the label
+  CO2   = c(5.5, 5, 5),       # position
+  Trt   = 'Compost',          # treatment
+  label = c('n.s.', 'n.s.', 'n.s.')
+)
+MR_substr_gg = MR_substr_gg +
+  geom_text(data = text,
+            aes(x = Substrate, y = CO2, label = label, group = NULL),
+            inherit.aes = FALSE,
+            size = 3    # Adjust size to match your theme
+  ) 
+# lignin
+text = data.table(
+  Year = unique(mr_dt$Year),  # year levels
+  Substrate = "Lignin",      # substrate position for the label
+  CO2   = c(5.5, 5, 5),       # position
+  Trt   = 'Compost',          # treatment
+  label = c('n.s.', 'n.s.', 'n.s.')
+)
+MR_substr_gg = MR_substr_gg +
+  geom_text(data = text,
+            aes(x = Substrate, y = CO2, label = label, group = NULL),
+            inherit.aes = FALSE,
+            size = 3    # Adjust size to match your theme
+  ) 
+MR_substr_gg
+ggsave("Figure4.tiff", plot = MR_substr_gg, path = figures_path, width = 88, height = 180, units = "mm", dpi = 600)

@@ -1,7 +1,7 @@
 # Plant Biomass and Community Analysis Script 
 # Author: Shelby C McClelland
 # Created:     20 December 2020
-# Last Update: 02 November 2024
+# Last Update: 22 February 2025
 # Description: This file analyzes soil chemical property data.
 #-------------------------------------------------------------------------------
 # Analysis notes:
@@ -127,67 +127,138 @@ print(fineroot_10_20cm)
 sink()
 #-------------------------------------------------------------------------------
 # Create Root Biomass Figures
-f_labels = c('2018.su'= '2018', '2019' = '2019', '2020.su' = '2020')
-t_root_bio_gg <- ggplot(root_dt[Year %in% c('2018.su','2019','2020.su')],aes(x = Trt, y = total, fill = Trt, group = Trt)) +
+f_labels      = c('2018.su'= '2018', '2019' = '2019', '2020.su' = '2020')
+
+t_root_bio_gg = ggplot(root_dt[Year %in% c('2018.su','2019','2020.su')],aes(x = Trt, y = total, fill = Trt, group = Trt)) +
   stat_boxplot(geom = "errorbar", width = 0.5) +  
   geom_boxplot(alpha = 0.9) +
-  stat_summary(fun=mean, geom="point", shape=23, size=4) +
+  stat_summary(fun=mean, geom="point", shape=23, size=3) +
   ylim(0.0,4.5) +
   facet_grid(~ Year, labeller = labeller(Year = f_labels)) +
   scale_fill_viridis(discrete = TRUE, option = "D", begin = 0.6, end = 0.2) +
-  ylab(expression("Biomass Carbon (Mg C ha"^-1*")")) +
+  ylab(expression("Total Root Biomass Carbon (Mg C ha"^-1*")")) +
   xlab("Treatment") +
-  theme_classic() +
-  theme(text=element_text(size=13, color = 'black'),
-        strip.text.x = element_text(size = 13, color = 'black'),
-        axis.text=element_text(size=13, color = 'black'),
+  theme_bw() +
+  theme(text=element_text(size=7, color = 'black'),
+        axis.title = element_text(size = 8, color = 'black'),
+        strip.text.x = element_text(size = 7, color = 'black'),
+        axis.text = element_text(size=7, color = 'black'),
         axis.text.x = element_blank(),
         axis.ticks.x = element_blank(),
-        axis.title.y =  element_blank(),
+        # axis.title.y =  element_blank(),
         axis.title.x = element_blank(),
-        legend.title=element_text(size = 13, color = 'black'),
-        legend.position = "none") +
-  guides(fill=guide_legend(title="Treatment"))
+        legend.title=element_text(size = 7, color = 'black'),
+        legend.position = "none",
+        plot.title.position = "plot",  # This moves the title to align with plot edge
+        plot.title = element_text(
+          hjust = -0.005,  # Slight adjustment left of the plot
+          vjust = -0.5,   # Slight adjustment above the plot
+          size = 7       # Match your other text size if needed
+        )) +
+  guides(fill=guide_legend(title="Treatment")) +
+  ggtitle('(b)') 
 t_root_bio_gg
 
-c_root_bio_gg <- ggplot(root_dt[Year %in% c('2018.su','2019','2020.su')],aes(x = Trt, y = coarse, fill = Trt, group = Trt)) +
+# add P-values
+text = data.table(Trt = 'Compost', total = 4.5, lab = "P = 0.03",
+                       Year  = factor(c("2018.su"),levels = c("2018.su","2019","2020.su")))
+t_root_bio_gg = t_root_bio_gg + geom_text(data = text, label = "P = 0.03", 
+                                          nudge_x = 0.5, size = 3)
+text = data.table(Trt = 'Compost', total = 4.5, lab = "n.s.",
+                  Year  = factor(c("2019"),levels = c("2018.su","2019","2020.su")))
+t_root_bio_gg = t_root_bio_gg + geom_text(data = text, label = "n.s.", 
+                                          nudge_x = 0.5, size = 3)
+text = data.table(Trt = 'Compost', total = 4.5, lab = "n.s.",
+                  Year  = factor(c("2020.su"),levels = c("2018.su","2019","2020.su")))
+t_root_bio_gg = t_root_bio_gg + geom_text(data = text, label = "n.s.", 
+                                          nudge_x = 0.5, size = 3)
+t_root_bio_gg
+
+
+c_root_bio_gg = ggplot(root_dt[Year %in% c('2018.su','2019','2020.su')],aes(x = Trt, y = coarse, fill = Trt, group = Trt)) +
   stat_boxplot(geom = "errorbar", width = 0.5) +  
   geom_boxplot(alpha = 0.9) +
-  stat_summary(fun=mean, geom="point", shape=23, size=4) +
+  stat_summary(fun=mean, geom="point", shape=23, size=3) +
   ylim(0.0,4.5) +
   facet_grid(~ Year, labeller = labeller(Year = f_labels)) +
   scale_fill_viridis(discrete = TRUE, option = "D", begin = 0.6, end = 0.2) +
-  ylab(expression("Biomass Carbon (Mg C ha"^-1*")")) +
+  ylab(expression("Coarse Root Biomass Carbon (Mg C ha"^-1*")")) +
   xlab("Treatment") +
-  theme_classic() +
-  theme(text=element_text(size=13, color = 'black'),
-        strip.text.x = element_text(size = 13, color = 'black'),
-        axis.text    = element_text(size=13, color = 'black'),
-        axis.title.y =  element_blank(),
+  theme_bw() +
+  theme(text=element_text(size=7, color = 'black'),
+        axis.title = element_text(size = 8, color = 'black'),
+        strip.text.x = element_text(size = 7, color = 'black'),
+        axis.text    = element_text(size=7, color = 'black'),
+        # axis.title.y =  element_blank(),
         axis.ticks.x = element_blank(),
-        legend.title = element_text(size = 13, color = 'black'),
-        legend.position = "none") +
-  guides(fill=guide_legend(title="Treatment"))
+        legend.title = element_text(size = 7, color = 'black'),
+        legend.position = "none",
+        plot.title.position = "plot",  # This moves the title to align with plot edge
+        plot.title = element_text(
+          hjust = -0.005,  # Slight adjustment left of the plot
+          vjust = -0.5,   # Slight adjustment above the plot
+          size = 7       # Match your other text size if needed
+        )) +
+  guides(fill=guide_legend(title="Treatment")) +
+  ggtitle('(c)')
 c_root_bio_gg
 
-f_root_bio_gg <- ggplot(root_dt[Year %in% c('2018.su','2019','2020.su')],aes(x = Trt, y = fine, fill = Trt, group = Trt)) +
+# add P-values
+text = data.table(Trt = 'Compost', coarse = 4.5, lab = "P = 0.03",
+                  Year  = factor(c("2018.su"),levels = c("2018.su","2019","2020.su")))
+c_root_bio_gg = c_root_bio_gg + geom_text(data = text, label = "P = 0.03", 
+                                          nudge_x = 0.5, size = 3)
+text = data.table(Trt = 'Compost', coarse = 4.5, lab = "P = 0.08",
+                  Year  = factor(c("2019"),levels = c("2018.su","2019","2020.su")))
+c_root_bio_gg = c_root_bio_gg + geom_text(data = text, label = "P = 0.08", 
+                                          nudge_x = 0.5, size = 3)
+text = data.table(Trt = 'Compost', coarse = 4.5, lab = "n.s.",
+                  Year  = factor(c("2020.su"),levels = c("2018.su","2019","2020.su")))
+c_root_bio_gg = c_root_bio_gg + geom_text(data = text, label = "n.s.", 
+                                          nudge_x = 0.5, size = 3)
+c_root_bio_gg
+
+f_root_bio_gg = ggplot(root_dt[Year %in% c('2018.su','2019','2020.su')],aes(x = Trt, y = fine, fill = Trt, group = Trt)) +
   stat_boxplot(geom = "errorbar", width = 0.5) +  
   geom_boxplot(alpha = 0.9) +
-  stat_summary(fun=mean, geom="point", shape=23, size=4) +
+  stat_summary(fun=mean, geom="point", shape=23, size=3) +
   ylim(0.0,4.5) +
   facet_grid(~ Year, labeller = labeller(Year = f_labels)) +
   scale_fill_viridis(discrete = TRUE, option = "D", begin = 0.6, end = 0.2) +
-  ylab(expression("Biomass Carbon (Mg C ha"^-1*")")) +
+  ylab(expression("Fine Roo Biomass Carbon (Mg C ha"^-1*")")) +
   xlab("Treatment") +
-  theme_classic() +
-  theme(text=element_text(size=13, color = 'black'),
-        strip.text.x = element_text(size = 13, color = 'black'),
-        axis.text=element_text(size=13, color = 'black'),
-        axis.title.y =  element_blank(),
+  theme_bw() +
+  theme(text=element_text(size=7, color = 'black'),
+        axis.title = element_text(size = 8, color = 'black'),
+        strip.text.x = element_text(size = 7, color = 'black'),
+        axis.text=element_text(size=7, color = 'black'),
+        # axis.title.y =  element_blank(),
         axis.ticks.x = element_blank(),
-        legend.title=element_text(size = 13, color = 'black'),
-        legend.position = "none") +
-  guides(fill=guide_legend(title="Treatment"))
+        legend.title=element_text(size = 7, color = 'black'),
+        legend.position = "none",
+        plot.title.position = "plot",  # This moves the title to align with plot edge
+        plot.title = element_text(
+          hjust = -0.005,  # Slight adjustment left of the plot
+          vjust = -0.5,   # Slight adjustment above the plot
+          size = 7       # Match your other text size if needed
+        )) +
+  guides(fill=guide_legend(title="Treatment")) +
+  ggtitle('(d)')
+f_root_bio_gg
+
+# add P-values
+text = data.table(Trt = 'Compost', fine = 4.5, lab = "n.s.",
+                  Year  = factor(c("2018.su"),levels = c("2018.su","2019","2020.su")))
+f_root_bio_gg = f_root_bio_gg + geom_text(data = text, label = "n.s.", 
+                                          nudge_x = 0.5, size = 3)
+text = data.table(Trt = 'Compost', fine = 4.5, lab = "n.s.",
+                  Year  = factor(c("2019"),levels = c("2018.su","2019","2020.su")))
+f_root_bio_gg = f_root_bio_gg + geom_text(data = text, label = "n.s.", 
+                                          nudge_x = 0.5, size = 3)
+text = data.table(Trt = 'Compost', fine = 4.5, lab = "n.s.",
+                  Year  = factor(c("2020.su"),levels = c("2018.su","2019","2020.su")))
+f_root_bio_gg = f_root_bio_gg + geom_text(data = text, label = "n.s.", 
+                                          nudge_x = 0.5, size = 3)
 f_root_bio_gg
 #-------------------------------------------------------------------------------
 # Shoot (biomass C)
@@ -213,35 +284,55 @@ print(BiomassC_m)
 sink()
 #-------------------------------------------------------------------------------
 # Create Shoot Biomass Figures
-shoot_bio_gg <- ggplot(shoot_dt,aes(x = Trt, y = Biomass_C, fill = Trt, group = Trt)) +
+shoot_bio_gg = ggplot(shoot_dt,aes(x = Trt, y = Biomass_C, fill = Trt, group = Trt)) +
   stat_boxplot(geom = "errorbar", width = 0.5) +  
   geom_boxplot(alpha = 0.9) +
-  stat_summary(fun=mean, geom="point", shape=23, size=4) +
+  stat_summary(fun=mean, geom="point", shape=23, size=3) +
   ylim(0.0,4.5) +
   facet_grid(~ Year, labeller = label_parsed) +
   scale_fill_viridis(discrete = TRUE, option = "D", begin = 0.6, end = 0.2) +
   ylab(expression("Biomass Carbon (Mg C ha"^-1*")")) +
   xlab("Treatment") +
-  theme_classic() +
-  theme(text=element_text(size=13, color = 'black'),
-        strip.text.x = element_text(size = 13, color = 'black'),
-        axis.text=element_text(size=13, color = 'black'),
+  theme_bw() +
+  theme(text=element_text(size=7, color = 'black'),
+        axis.title = element_text(size = 8, color = 'black'),
+        strip.text.x = element_text(size = 7, color = 'black'),
+        axis.text=element_text(size=7, color = 'black'),
         axis.text.x = element_blank(),
         axis.ticks.x = element_blank(),
-        axis.title.y =  element_blank(),
+        # axis.title.y =  element_blank(),
         axis.title.x = element_blank(),
-        legend.title=element_text(size = 13, color = 'black'),
-        legend.position = "none") +
-  guides(fill=guide_legend(title="Treatment"))
+        legend.title=element_text(size = 7, color = 'black'),
+        legend.position = "none",
+        plot.title.position = "plot",  # This moves the title to align with plot edge
+        plot.title = element_text(
+          hjust = -0.005,  # Slight adjustment left of the plot
+          vjust = -0.5,   # Slight adjustment above the plot
+          size = 7       # Match your other text size if needed
+        )) +
+  guides(fill=guide_legend(title="Treatment")) +
+  ggtitle('(a)')
+shoot_bio_gg
+
+# add P-values
+text = data.table(Trt = 'Compost', Biomass_C = 4.5, lab = "P = 0.001",
+                  Year  = factor(c("2018"),levels = c("2018","2019","2020")))
+shoot_bio_gg = shoot_bio_gg + geom_text(data = text, label = "P = 0.001", 
+                                          nudge_x = 0.5, size = 3)
+text = data.table(Trt = 'Compost', Biomass_C = 4.5, lab = "n.s.",
+                  Year  = factor(c("2019"),levels = c("2018","2019","2020")))
+shoot_bio_gg = shoot_bio_gg + geom_text(data = text, label = "n.s.", 
+                                          nudge_x = 0.5, size = 3)
+text = data.table(Trt = 'Compost', Biomass_C = 4.5, lab = "P = 0.001",
+                  Year  = factor(c("2020"),levels = c("2018","2019","2020")))
+shoot_bio_gg = shoot_bio_gg + geom_text(data = text, label = "P = 0.001", 
+                                          nudge_x = 0.5, size = 3)
 shoot_bio_gg
 #-------------------------------------------------------------------------------
 # Combine plots
-yleft = textGrob(expression(paste("Biomass Carbon (Mg C ha"^-1*")")), 
-                  rot = 90, gp = gpar(fontsize = 16))
 biomass_p = grid.arrange(shoot_bio_gg, t_root_bio_gg, c_root_bio_gg, f_root_bio_gg,
-                         nrow = 2, ncol = 2,
-                         left = yleft)
-ggsave("EcolLetters_Biomass.tiff", plot = biomass_p, path = figures_path, width = 11, height = 8, units = "in", dpi = 300)
+                         nrow = 2, ncol = 2)
+ggsave("Figure1.tiff", plot = biomass_p, path = figures_path, width = 180, height = 180, units = "mm", dpi = 600)
 #-------------------------------------------------------------------------------
 # Plant Community Analyses
 # Shannon Equitability Index (EH)
@@ -287,54 +378,100 @@ print(div_Ri_MM)
 sink()
 #-------------------------------------------------------------------------------
 # Create Plant Diversity Figures
-div_EH_gg <- ggplot(div_dt,aes(x = Trt, y = Avg_EH, fill = Trt, group = Trt)) +
+div_EH_gg = ggplot(div_dt,aes(x = Trt, y = Avg_EH, fill = Trt, group = Trt)) +
   stat_boxplot(geom = "errorbar", width = 0.5) +  
   geom_boxplot(alpha = 0.9) +
-  stat_summary(fun=mean, geom="point", shape=23, size=4) +
+  stat_summary(fun=mean, geom="point", shape=23, size=3) +
   ylim(0.0,1.0) +
   facet_grid(~ Year) +
   scale_fill_viridis(discrete = TRUE, option = "D", begin = 0.6, end = 0.2) +
   ylab("Shannon Equitability Index") +
   xlab("Treatment") +
-  theme_classic() +
-  theme(text=element_text(size=13, color = 'black'),
-        strip.text.x = element_text(size = 13, color = 'black'),
-        axis.text=element_text(size=13, color = 'black'),
+  theme_bw() +
+  theme(text=element_text(size=7, color = 'black'),
+        axis.title = element_text(size = 8, color = 'black'),
+        strip.text.x = element_text(size = 7, color = 'black'),
+        axis.text=element_text(size=7, color = 'black'),
         axis.text.x = element_blank(),
         axis.ticks.x = element_blank(),
         # axis.title.y =  element_blank(),
         axis.title.x = element_blank(),
-        legend.title=element_text(size = 13, color = 'black'),
-        legend.position = "none") +
-  guides(fill=guide_legend(title="Treatment"))
+        legend.title=element_text(size = 7, color = 'black'),
+        legend.position = "none",
+        plot.title.position = "plot",  # This moves the title to align with plot edge
+        plot.title = element_text(
+          hjust = -0.005,  # Slight adjustment left of the plot
+          vjust = -0.5,   # Slight adjustment above the plot
+          size = 7       # Match your other text size if needed
+        )) +
+  guides(fill=guide_legend(title="Treatment")) +
+  ggtitle('(a)')
 div_EH_gg
 
-div_Ri_gg <- ggplot(div_dt,aes(x = Trt, y = Avg_Richness, fill = Trt, group = Trt)) +
+# add P-values
+text = data.table(Trt = 'Compost', Avg_EH = 1, lab = "n.s.",
+                  Year  = factor(c("2018"),levels = c("2018","2019","2020")))
+div_EH_gg = div_EH_gg + geom_text(data = text, label = "n.s.", 
+                                        nudge_x = 0.5, size = 3)
+text = data.table(Trt = 'Compost', Avg_EH = 1, lab = "P = 0.002",
+                  Year  = factor(c("2019"),levels = c("2018","2019","2020")))
+div_EH_gg = div_EH_gg + geom_text(data = text, label = "P = 0.002", 
+                                        nudge_x = 0.5, size = 3)
+text = data.table(Trt = 'Compost', Avg_EH = 1, lab = "P = 0.10",
+                  Year  = factor(c("2020"),levels = c("2018","2019","2020")))
+div_EH_gg = div_EH_gg + geom_text(data = text, label = "P = 0.10", 
+                                        nudge_x = 0.5, size = 3)
+div_EH_gg
+
+div_Ri_gg = ggplot(div_dt,aes(x = Trt, y = Avg_Richness, fill = Trt, group = Trt)) +
   stat_boxplot(geom = "errorbar", width = 0.5) +  
   geom_boxplot(alpha = 0.9) +
-  stat_summary(fun=mean, geom="point", shape=23, size=4) +
+  stat_summary(fun=mean, geom="point", shape=23, size=3) +
   ylim(0.0,5) +
   facet_grid(~ Year) +
   scale_fill_viridis(discrete = TRUE, option = "D", begin = 0.6, end = 0.2) +
   ylab("Plant Species Richness") +
   xlab("Treatment") +
-  theme_classic() +
-  theme(text=element_text(size=13, color = 'black'),
-        strip.text.x = element_text(size = 13, color = 'black'),
-        axis.text=element_text(size=13, color = 'black'),
+  theme_bw() +
+  theme(text=element_text(size=7, color = 'black'),
+        axis.title = element_text(size = 8, color = 'black'),
+        strip.text.x = element_text(size = 7, color = 'black'),
+        axis.text=element_text(size=7, color = 'black'),
         # axis.text.x = element_blank(),
         axis.ticks.x = element_blank(),
         # axis.title.y =  element_blank(),
-        axis.title.x = element_blank(),
-        legend.title=element_text(size = 13, color = 'black'),
-        legend.position = "none") +
-  guides(fill=guide_legend(title="Treatment"))
+        # axis.title.x = element_blank(),
+        legend.title=element_text(size = 7, color = 'black'),
+        legend.position = "none",
+        plot.title.position = "plot",  # This moves the title to align with plot edge
+        plot.title = element_text(
+          hjust = -0.005,  # Slight adjustment left of the plot
+          vjust = -0.5,   # Slight adjustment above the plot
+          size = 7       # Match your other text size if needed
+        )) +
+  guides(fill=guide_legend(title="Treatment")) +
+  ggtitle('(b)')
+div_Ri_gg
+
+# add P-values
+text = data.table(Trt = 'Compost', Avg_Richness = 0.5, lab = "n.s.",
+                  Year  = factor(c("2018"),levels = c("2018","2019","2020")))
+div_Ri_gg = div_Ri_gg + geom_text(data = text, label = "n.s.", 
+                                  nudge_x = 0.5, size = 3)
+text = data.table(Trt = 'Compost', Avg_Richness = 0.5, lab = "P = 0.03",
+                  Year  = factor(c("2019"),levels = c("2018","2019","2020")))
+div_Ri_gg = div_Ri_gg + geom_text(data = text, label = "P = 0.03", 
+                                  nudge_x = 0.5, size = 3)
+text = data.table(Trt = 'Compost', Avg_Richness = 0.5, lab = "n.s.",
+                  Year  = factor(c("2020"),levels = c("2018","2019","2020")))
+div_Ri_gg = div_Ri_gg + geom_text(data = text, label = "n.s.", 
+                                  nudge_x = 0.5, size = 3)
 div_Ri_gg
 #-------------------------------------------------------------------------------
 # Combine plots
 div_p = grid.arrange(div_EH_gg, div_Ri_gg,
                          nrow = 2, ncol = 1)
-ggsave("EcolLetters_PlantDiversity.tiff", plot = div_p, path = figures_path, width = 6, height = 9, units = "in", dpi = 300)
+ggsave("Figure2.tiff", plot = div_p, path = figures_path, width = 88, height = 130, units = "mm", dpi = 600)
 #-------------------------------------------------------------------------------
 # Relative Abundance 
 # aggregate inermis and commutatus to spp
