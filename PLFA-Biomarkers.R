@@ -244,7 +244,7 @@ plfa_bio_gg = ggplot(plfa_dt[Year %in% c('Post.2018','Post.2019','Post.2020')],a
   ylim(0.0,1560) +
   facet_grid(~ Year, labeller = labeller(Year = f_labels)) +
   scale_fill_viridis(discrete = TRUE, option = "D", begin = 0.6, end = 0.2) +
-  ylab(expression("PLFA Biomass (nmol g"^-1*")")) +
+  ylab(expression("Total PLFA Biomass (nmol g"^-1*")")) +
   xlab("Treatment") +
   theme_bw() +
   theme(text=element_text(size=7, color = 'black'),
@@ -289,7 +289,7 @@ bacteria_bio_gg = ggplot(plfa_grouped[Year %in% c('Post.2018','Post.2019','Post.
   ylim(0.0,850) +
   facet_grid(~ Year, labeller = labeller(Year = f_labels)) +
   scale_fill_viridis(discrete = TRUE, option = "D", begin = 0.6, end = 0.2) +
-  ylab(expression("PLFA Biomass (nmol g"^-1*")")) +
+  ylab(expression("Bacteria PLFA Biomass (nmol g"^-1*")")) +
   xlab("Treatment") +
   theme_bw() +
   theme(text=element_text(size=7, color = 'black'),
@@ -334,14 +334,14 @@ g_pos_bio_gg = ggplot(plfa_grouped[Year %in% c('Post.2018','Post.2019','Post.202
   ylim(0.0,850) +
   facet_grid(~ Year, labeller = labeller(Year = f_labels)) +
   scale_fill_viridis(discrete = TRUE, option = "D", begin = 0.6, end = 0.2) +
-  ylab(expression("PLFA Biomass (nmol g"^-1*")")) +
+  ylab(expression("Gram Positive PLFA Biomass (nmol g"^-1*")")) +
   xlab("Treatment") +
   theme_bw() +
   theme(text=element_text(size=7, color = 'black'),
         axis.title = element_text(size = 8, color = 'black'),
         strip.text.x = element_text(size = 7, color = 'black'),
         axis.text=element_text(size=7, color = 'black'),
-        axis.title.y =  element_blank(),
+        # axis.title.y =  element_blank(),
         axis.ticks.x = element_blank(),
         legend.title=element_text(size = 7, color = 'black'),
         legend.position = "none",
@@ -377,14 +377,14 @@ actino_bio_gg = ggplot(plfa_grouped[Year %in% c('Post.2018','Post.2019','Post.20
   ylim(0.0,850) +
   facet_grid(~ Year, labeller = labeller(Year = f_labels)) +
   scale_fill_viridis(discrete = TRUE, option = "D", begin = 0.6, end = 0.2) +
-  ylab(expression("PLFA Biomass (nmol g"^-1*")")) +
+  ylab(expression("Actinomycetes PLFA Biomass (nmol g"^-1*")")) +
   xlab("Treatment") +
   theme_bw() +
   theme(text=element_text(size=7, color = 'black'),
         axis.title = element_text(size = 8, color = 'black'),
         strip.text.x = element_text(size = 7, color = 'black'),
         axis.text=element_text(size=7, color = 'black'),
-        axis.title.y =  element_blank(),
+        # axis.title.y =  element_blank(),
         axis.ticks.x = element_blank(),
         legend.title=element_text(size = 7, color = 'black'),
         legend.position = "none",
@@ -412,7 +412,6 @@ text = data.table(Trt = 'Compost', actino = 800, lab = "P = 0.05",
 actino_bio_gg = actino_bio_gg + geom_text(data = text, label = "P = 0.05", 
                                         nudge_x = 0.5, size = 3)
 actino_bio_gg
-
 #-------------------------------------------------------------------------------
 # Combine plots
 plfa_p = grid.arrange(plfa_bio_gg, bacteria_bio_gg, g_pos_bio_gg, actino_bio_gg,

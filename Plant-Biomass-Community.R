@@ -1,7 +1,7 @@
 # Plant Biomass and Community Analysis Script 
 # Author: Shelby C McClelland
 # Created:     20 December 2020
-# Last Update: 22 February 2025
+# Last Update: 23 February 2025
 # Description: This file analyzes plant biomass and community data.
 #-------------------------------------------------------------------------------
 # Analysis notes:
@@ -225,7 +225,7 @@ f_root_bio_gg = ggplot(root_dt[Year %in% c('2018.su','2019','2020.su')],aes(x = 
   ylim(0.0,4.5) +
   facet_grid(~ Year, labeller = labeller(Year = f_labels)) +
   scale_fill_viridis(discrete = TRUE, option = "D", begin = 0.6, end = 0.2) +
-  ylab(expression("Fine Roo Biomass Carbon (Mg C ha"^-1*")")) +
+  ylab(expression("Fine Root Biomass Carbon (Mg C ha"^-1*")")) +
   xlab("Treatment") +
   theme_bw() +
   theme(text=element_text(size=7, color = 'black'),
@@ -291,7 +291,7 @@ shoot_bio_gg = ggplot(shoot_dt,aes(x = Trt, y = Biomass_C, fill = Trt, group = T
   ylim(0.0,4.5) +
   facet_grid(~ Year, labeller = label_parsed) +
   scale_fill_viridis(discrete = TRUE, option = "D", begin = 0.6, end = 0.2) +
-  ylab(expression("Biomass Carbon (Mg C ha"^-1*")")) +
+  ylab(expression("Shoot Biomass Carbon (Mg C ha"^-1*")")) +
   xlab("Treatment") +
   theme_bw() +
   theme(text=element_text(size=7, color = 'black'),
